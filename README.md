@@ -3,10 +3,17 @@
 </p>
 
 [![Pipeline Tests](https://gitlab.es.gov.br/espm/apis/api-detran/badges/master/build.svg)](https://gitlab.es.gov.br/espm/apis/api-detran/pipelines)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)] (http://commitizen.github.io/cz-cli/) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)] (http://commitizen.github.io/cz-cli/)
+
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+
 [![Quality Gate](http://sonar.10.243.9.12.xip.io/api/project_badges/measure?project=api-detran&metric=alert_status)](http://sonar.10.243.9.12.xip.io/dashboard?id=api-detran)
+
 [![Bugs](http://sonar.10.243.9.12.xip.io/api/project_badges/measure?project=api-detran&metric=bugs)](http://sonar.10.243.9.12.xip.io/dashboard?id=api-detran)
+
 [![Codesmells](http://sonar.10.243.9.12.xip.io/api/project_badges/measure?project=api-detran&metric=code_smells)](http://sonar.10.243.9.12.xip.io/dashboard?id=api-detran)
+
 [![Vulnerabilities](http://sonar.10.243.9.12.xip.io/api/project_badges/measure?project=api-detran&metric=vulnerabilities)](http://sonar.10.243.9.12.xip.io/dashboard?id=api-detran)
 
 
