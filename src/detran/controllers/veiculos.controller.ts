@@ -1,4 +1,5 @@
 import { Controller, Get, Param, Res, HttpStatus, HttpException } from '@nestjs/common';
+import { Response } from 'express';
 import { VeiculosService } from '../services/veiculos.service';
 import { ApiOperation, ApiResponse, ApiImplicitParam, ApiUseTags } from '@nestjs/swagger';
 import { Retorno } from '../models/retorno.model';
@@ -143,13 +144,21 @@ export class VeiculosController {
     description: 'Renavam do veiculo',
     required: true,
   } )
-  async gerarGRU( @Res() res, @Param() params ) {
+  async gerarGRU ( @Res() res: Response, @Param() params ) {
 
     try {
-      this.resposta = await this.veiculosService.gerarGRU( params);
-      res.status( this.resposta.status ).send( this.resposta.res );
-    } catch (error) {
-      throw new HttpException('Erro ao gerar a GRU.', HttpStatus.FORBIDDEN);
+      const resposta = await this.veiculosService.gerarGRU( params );
+      
+      if (resposta.status === HttpStatus.OK) {
+        const pdf = new Buffer(resposta.res.guiaPDF, 'base64');
+        return res.status(resposta.status)
+           .header('Content-Type', 'application/pdf')
+           .send(pdf);
+      }
+
+      return res.status( resposta.status ).send( resposta.res );
+    } catch ( error ) {
+      throw new HttpException( 'Erro ao gerar a GRU.', HttpStatus.FORBIDDEN );
     }
   }
 
