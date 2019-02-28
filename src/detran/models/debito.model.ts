@@ -1,10 +1,27 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { ClassDeb } from './enum';
 import { DefineClasseDebitos } from '../common/config/defineClasseDebitos.config';
+import { ClassDeb } from './__mocks__/enum';
 
 export class Debito extends DefineClasseDebitos{
-  @ApiModelProperty()
-  classe: string;
+  @ApiModelProperty({
+    enum: [
+      'Licenciamento',
+      'Registro Veículo',
+      'IPVA',
+      'Seguro DPVAT',
+      'Multas',
+      'Vistoria',
+      'Certidões',
+      'Apreensão',
+      'Credenciamento',
+      'Diversos Veículos',
+      'Parcelamento IPVA',
+      'Placas',
+      'Pátio',
+      'Registro de Contrato',
+    ]
+  })
+  classe: ClassDeb;
 
   @ApiModelProperty()
   codigoServico: number;
@@ -89,7 +106,7 @@ export class Debito extends DefineClasseDebitos{
     this.flagDpvatExercicio = debito.DpvatExercicio;
     this.flagDpvatAnterior = debito.DpvatAnterior;
     this.codigoServico = debito.CodigoServico;
-    this.classe = super.defineClasse(debito.Classe);
+    this.classe = super.defineClasse(debito.Classe) || debito.Classe;
     this.exercicio = debito.Exercicio;
     this.parcela = debito.Parcela;
     this.ipvaCotas = debito.IpvaCotas;

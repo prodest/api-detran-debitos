@@ -5,7 +5,7 @@ export abstract class DefineClasseDebitos {
 
     constructor (){ }
 
-    defineClasse(classe: number): string {
+    defineClasse(classe: number): ClassDeb {
         switch (classe) { 
           case 1:
             return ClassDeb.CLASSE1;
@@ -35,8 +35,6 @@ export abstract class DefineClasseDebitos {
             return ClassDeb.CLASSE13;
           case 14:
             return ClassDeb.CLASSE14;
-          default:
-            return String(classe);
         }
       }
 

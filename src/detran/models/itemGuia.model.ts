@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { DefineClasseDebitos } from '../common/config/defineClasseDebitos.config';
+import { ClassDeb } from './enum';
 
 export class ItemGuia extends DefineClasseDebitos {
   @ApiModelProperty()
@@ -35,8 +36,25 @@ export class ItemGuia extends DefineClasseDebitos {
   @ApiModelProperty()
   tipoRegistro: number;
 
-  @ApiModelProperty()
-  classe: string;
+  @ApiModelProperty({
+    enum: [
+      'Licenciamento',
+      'Registro Veículo',
+      'IPVA',
+      'Seguro DPVAT',
+      'Multas',
+      'Vistoria',
+      'Certidões',
+      'Apreensão',
+      'Credenciamento',
+      'Diversos Veículos',
+      'Parcelamento IPVA',
+      'Placas',
+      'Pátio',
+      'Registro de Contrato',
+    ]
+  })
+  classe: ClassDeb;
 
   @ApiModelProperty()
   descricaoServico: string;
@@ -84,7 +102,7 @@ export class ItemGuia extends DefineClasseDebitos {
     this.nossoNumero = i_guia.Nossonumero;
     this.vencimentoGuia = i_guia.Vencimentoguia;
     this.tipoRegistro = i_guia.Tiporegistro;
-    this.classe = super.defineClasse(i_guia.Classe);
+    this.classe = super.defineClasse(i_guia.Classe) || i_guia.Classe;
     this.descricaoServico = i_guia.Descricaoservico;
     this.dataVencimento = i_guia.Datavencimento;
     this.valorVencimento = i_guia.Valorvencimento;

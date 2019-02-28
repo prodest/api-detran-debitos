@@ -8,14 +8,22 @@ import { VeiculoRetorno } from '../models/veiculoRetorno.model';
 import { TipoDebito } from '../models/tipoDebito.model';
 import { DebitoRetorno } from '../models/debitoRetorno.model';
 import { GerarGuiaRetorno } from '../models/gerarGuiaRetorno.model';
+import * as Redis from 'async-redis';
 
 @Controller( 'veiculos' )
 @ApiUseTags('veiculos-debitos')
 export class VeiculosController {
-  resposta: Retorno;
-  respostaErro: any;
+  redisClient = Redis.createClient({
+    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST
+  });
+  
 
-  constructor( private readonly veiculosService: VeiculosService ) { }
+  constructor( private readonly veiculosService: VeiculosService ) {
+    this.redisClient.on("error", function (err) {
+      console.log("Error " + err);
+    });
+   }
 
   @Get( ':placa/:renavam' )
   @ApiOperation( {
@@ -34,10 +42,10 @@ export class VeiculosController {
     description: 'Renavam do veiculo.',
     required: true,
   } )
-  async getDadosVeiculos( @Res() res, @Param() params ) {
+  async getDadosVeiculos( @Res() res: Response, @Param() params ) {
     try {
-      this.resposta = await this.veiculosService.getDadosVeiculos( params );
-      res.status( this.resposta.status ).send( this.resposta.res);
+      const resposta: Retorno = await this.veiculosService.getDadosVeiculos( params );
+      res.status( resposta.status ).send( resposta.res);
     } catch ( error ) {
       throw new HttpException('Error ao fazer a requisição dos dados do veiculo.', HttpStatus.FORBIDDEN);
     }
@@ -60,10 +68,10 @@ export class VeiculosController {
     description: 'Renavam do veiculo',
     required: true,
   } )
-  async getDebitos( @Res() res, @Param() params ) {
+  async getDebitos( @Res() res: Response, @Param() params ) {
     try {
-      this.resposta = await this.veiculosService.getDebitos( params );
-      res.status( this.resposta.status ).send( this.resposta.res);
+      const resposta: Retorno = await this.veiculosService.getDebitos( params );
+      res.status( resposta.status ).send( resposta.res);
     } catch (error) {
       throw new HttpException('Erro ao requisitar os débitos.', HttpStatus.FORBIDDEN);
     }
@@ -87,10 +95,10 @@ export class VeiculosController {
     description: 'Renavam do veiculo',
     required: true,
   } )
-  async getDebitosPreview( @Res() res, @Param() params ) {
+  async getDebitosPreview( @Res() res: Response, @Param() params ) {
     try {
-      this.resposta = await this.veiculosService.getDebitosPreview( params );
-      res.status( this.resposta.status ).send( this.resposta.res);
+      const resposta: Retorno = await this.veiculosService.getDebitosPreview( params );
+      res.status( resposta.status ).send( resposta.res);
     } catch (error) {
       throw new HttpException('Erro ao exibir preview dos debitos.', HttpStatus.FORBIDDEN);
     }
@@ -118,10 +126,10 @@ export class VeiculosController {
     description: 'Tipo de debitos',
     required: true,
   } )
-  async getTiposDebitos( @Res() res, @Param() params ) {
+  async getTiposDebitos( @Res() res: Response, @Param() params ) {
     try {
-      this.resposta = await this.veiculosService.getTiposDebitos( params );
-      res.status( this.resposta.status ).send( this.resposta.res );
+      const resposta: Retorno = await this.veiculosService.getTiposDebitos( params );
+      res.status( resposta.status ).send( resposta.res );
     } catch (error) {
       throw new HttpException('Erro ao exibir lista de debitos do tipo.', HttpStatus.FORBIDDEN);
     }
@@ -147,18 +155,12 @@ export class VeiculosController {
   async gerarGRU ( @Res() res: Response, @Param() params ) {
 
     try {
-      const resposta = await this.veiculosService.gerarGRU( params );
-      
-      if (resposta.status === HttpStatus.OK) {
-        const pdf = new Buffer(resposta.res.guiaPDF, 'base64');
-        return res.status(resposta.status)
-           .header('Content-Type', 'application/pdf')
-           .send(pdf);
-      }
-
-      return res.status( resposta.status ).send( resposta.res );
+      const resposta: Retorno = await this.veiculosService.gerarGRU( params );
+      this.redisClient.set(resposta.res.itensGuia[0].codigoBarra, resposta.res.guiaPDF);
+      this.redisClient.expire(resposta.res.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME));
+      res.status( resposta.status ).send( resposta.res );
     } catch ( error ) {
-      throw new HttpException( 'Erro ao gerar a GRU.', HttpStatus.FORBIDDEN );
+      throw new HttpException( 'Erro ao gerar a GRU.'+error, HttpStatus.FORBIDDEN );
     }
   }
 
@@ -189,13 +191,42 @@ export class VeiculosController {
     description: 'Lista de IDs de debitos, separados por virgula',
     required: true,
   } )
-  async gerarGRUParcial( @Res() res, @Param() params ) {
+  async gerarGRUParcial( @Res() res: Response, @Param() params ) {
 
     try {
-      this.resposta = await this.veiculosService.gerarGRUParcial( params);
-      res.status( this.resposta.status ).send( this.resposta.res );
+      const resposta: Retorno = await this.veiculosService.gerarGRUParcial( params);
+      this.redisClient.set(resposta.res.itensGuia[0].codigoBarra, resposta.res.guiaPDF);
+      this.redisClient.expire(resposta.res.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME));
+      res.status( resposta.status ).send( resposta.res );
     } catch (error) {
       throw new HttpException('Erro ao gerar a GRU.', HttpStatus.FORBIDDEN);
+    }
+  }
+
+  @Get( 'debitos/getGuia/:codigoBarra' )
+  @ApiOperation( {
+    description: 'Retornar um pdf da guia para pagamento.',
+    title: 'Guia PDF',
+  } )
+  @ApiResponse( { status: 200, description: 'Guia encontrada, retorna uma guia em pdf ', type: DebitoRetorno } )
+  @ApiResponse( { status: 403, description: 'Retorna uma MensagemErro' } )
+  @ApiImplicitParam( {
+    name: 'codigoBarra',
+    description: 'Código de barras da guia gerada',
+    required: true,
+  } )
+  async pegarGUIA( @Res() res: Response, @Param() params ) {
+
+    try {
+      const pdf64: string = await this.redisClient.get(params.codigoBarra);
+      const pdf: Buffer = new Buffer(pdf64, 'base64');
+      const dataAtual: Date = new Date();
+
+      res.header('Content-Type', 'application/pdf')
+         .header('Content-Disposition', `inline; filename=dua_detran_${dataAtual.getTime()}.pdf`)
+         .status( HttpStatus.OK ).send(pdf);
+    } catch (error) {
+      throw new HttpException('DUA não encontrada.', HttpStatus.FORBIDDEN);
     }
   }
 

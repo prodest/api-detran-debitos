@@ -2,7 +2,7 @@ import { ItemGuia } from './itemGuia.model';
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class GerarGuiaRetorno {
-  @ApiModelProperty()
+  @ApiModelProperty({type: [ItemGuia]})
   itensGuia: Array<ItemGuia>;
 
   @ApiModelProperty()

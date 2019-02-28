@@ -2,7 +2,7 @@ import { ApiModelProperty } from '@nestjs/swagger';
 import { Debito } from './debito.model';
 
 export class DebitoRetorno {
-  @ApiModelProperty()
+  @ApiModelProperty({type: [Debito]})
   debitos: Array<any>;
 
   @ApiModelProperty()

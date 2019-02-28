@@ -10,31 +10,26 @@ import { TypeDeb } from '../models/enum';
 
 @Injectable()
 export class VeiculosService {
-  detranSoapClient: DetranSoapClient;
-  res: any;
-  veiculoConsulta: any;
-  veiculoRetorno: VeiculoRetorno;
-  client: any;
-  debitos: any;
+  private detranSoapClient: DetranSoapClient;
 
   constructor() {
     this.detranSoapClient = new DetranSoapClient();
   }
 
   async getDadosVeiculos(params: any): Promise<Retorno> {
-    this.veiculoConsulta = new VeiculoConsulta(params);
-    this.client = await this.detranSoapClient._client;
+    const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
+    const client = await this.detranSoapClient._client;
 
-    if (Object.keys(this.client)[0] === 'mensagemErro') {
-      return new Retorno(this.client);
+    if (Object.keys(client)[0] === 'mensagemErro') {
+      return new Retorno(client);
     }
 
     try {
-      this.res = await this.client.ObterDadosVeiculo(this.veiculoConsulta);
-      this.veiculoRetorno = new VeiculoRetorno(
-        this.res.ObterDadosVeiculoResult,
+      const res  = await client.ObterDadosVeiculo(veiculoConsulta);
+      const veiculoRetorno: VeiculoRetorno = new VeiculoRetorno(
+        res.ObterDadosVeiculoResult,
       );
-      return new Retorno(this.veiculoRetorno);
+      return new Retorno(veiculoRetorno);
     } catch (error) {
       return new Retorno({
         mensagemErro: 'Erro ao obter os dados do veiculo.',
@@ -43,17 +38,17 @@ export class VeiculosService {
   }
 
   async getDebitos(params: any): Promise<Retorno> {
-    this.veiculoConsulta = new VeiculoConsulta(params);
-    this.client = await this.detranSoapClient._client;
+    const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
+    const client = await this.detranSoapClient._client;
 
-    if (Object.keys(this.client)[0] === 'mensagemErro') {
-      return new Retorno(this.client);
+    if (Object.keys(client)[0] === 'mensagemErro') {
+      return new Retorno(client);
     }
 
     try {
-      this.res = await this.client.ObterDebitos(this.veiculoConsulta);
-      this.debitos = new DebitoRetorno(this.res.ObterDebitosResult);
-      return new Retorno(this.debitos.debitos);
+      const res = await client.ObterDebitos(veiculoConsulta);
+      const debitos = new DebitoRetorno(res.ObterDebitosResult);
+      return new Retorno(debitos.debitos);
     } catch (error) {
       return new Retorno({
         mensagemErro: 'Erro ao obter debitos.',
@@ -62,17 +57,17 @@ export class VeiculosService {
   }
 
   async getDebitosPreview(params: any): Promise<Retorno> {
-    this.veiculoConsulta = new VeiculoConsulta(params);
-    this.client = await this.detranSoapClient._client;
+    const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
+    const client = await this.detranSoapClient._client;
 
-    if (Object.keys(this.client)[0] === 'mensagemErro') {
-      return new Retorno(this.client);
+    if (Object.keys(client)[0] === 'mensagemErro') {
+      return new Retorno(client);
     }
 
     try {
-      this.res = await this.client.ObterTiposDebitos(this.veiculoConsulta);
+      const res = await client.ObterTiposDebitos(veiculoConsulta);
       const tipoDebito = new TipoDebito(
-        this.res.ObterTiposDebitosResult.TipoDebito,
+        res.ObterTiposDebitosResult.TipoDebito,
       );
 
       return new Retorno(tipoDebito);
@@ -84,23 +79,22 @@ export class VeiculosService {
   }
 
   async getTiposDebitos(params: any): Promise<Retorno> {
-    this.veiculoConsulta = new VeiculoConsulta(params);
-    this.veiculoConsulta.tipoSelecionado = params.tipo_debito.toUpperCase();
-    this.client = await this.detranSoapClient._client;
+    const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
+    const client = await this.detranSoapClient._client;
 
 
-    if (Object.keys(this.client)[0] === 'mensagemErro') {
-      return new Retorno(this.client);
+    if (Object.keys(client)[0] === 'mensagemErro') {
+      return new Retorno(client);
     }
 
     try {
-      this.res = await this.client.ObterDebitosPorTipoDebito(
-        this.veiculoConsulta,
+      const res = await client.ObterDebitosPorTipoDebito(
+        veiculoConsulta,
       );
-      this.debitos = new DebitoRetorno(
-        this.res.ObterDebitosPorTipoDebitoResult,
+      const debitos = new DebitoRetorno(
+        res.ObterDebitosPorTipoDebitoResult,
       );
-      return new Retorno(this.debitos.debitos);
+      return new Retorno(debitos.debitos);
     } catch (error) {
       return new Retorno({
         mensagemErro: 'Erro ao buscar os debitos.',
@@ -109,12 +103,12 @@ export class VeiculosService {
   }
 
   async gerarGRU(params: any): Promise<Retorno> {
-    this.veiculoConsulta = new VeiculoConsulta(params);
-    this.client = await this.detranSoapClient._client;
+    const veiculoConsulta = new VeiculoConsulta(params);
+    const client = await this.detranSoapClient._client;
     const array_ids: Array<string> = new Array();
 
-    if (Object.keys(this.client)[0] === 'mensagemErro') {
-      return new Retorno(this.client);
+    if (Object.keys(client)[0] === 'mensagemErro') {
+      return new Retorno(client);
     }
 
     try {
@@ -136,11 +130,11 @@ export class VeiculosService {
       });
     }
 
-    this.veiculoConsulta.listaDebitos = array_ids.toString();
+    veiculoConsulta.listaDebitos = array_ids.toString();
 
     try {
-      this.res = await this.client.GerarGuia(this.veiculoConsulta);
-      const guia: any = new GerarGuiaRetorno(this.res.GerarGuiaResult);
+      const res = await client.GerarGuia(veiculoConsulta);
+      const guia: GerarGuiaRetorno = new GerarGuiaRetorno(res.GerarGuiaResult);
       return new Retorno(guia);
     } catch (error) {
       return new Retorno({
@@ -150,8 +144,8 @@ export class VeiculosService {
   }
 
   async gerarGRUParcial(params: any): Promise<Retorno> {
-    this.veiculoConsulta = new VeiculoConsulta(params);
-    this.client = await this.detranSoapClient._client;
+    const veiculoConsulta = new VeiculoConsulta(params);
+    const client = await this.detranSoapClient._client;
     let validoListaIDs: boolean;
     let deb: Retorno;
 
@@ -169,16 +163,10 @@ export class VeiculosService {
           switch (params.tipo_debito.toUpperCase()) {
             case TypeDeb.LICATUAL:
               console.log
-              validoListaIDs = await this.validaLicenciamentoAtual(
-                deb,
-                listaIDs,
-              );
+              validoListaIDs = await this.validaLicenciamentoAtual(deb, listaIDs);
               break;
             case TypeDeb.LICANTER:
-              validoListaIDs = await this.validaLicenciamentoAnterior(
-                deb,
-                listaIDs,
-              );
+              validoListaIDs = await this.validaLicenciamentoAnterior(deb, listaIDs);
               break;
             case TypeDeb.IPVAATUAL:
               validoListaIDs = await this.validaIPVA(deb, listaIDs);
@@ -202,7 +190,7 @@ export class VeiculosService {
           }
         } catch (error) {
           return new Retorno({
-            mensagemErro: 'Error ao validar debitos.',
+            mensagemErro: 'Error ao validar debitos. Tente novamente mais tarde.',
           });
         }
       }
@@ -212,12 +200,12 @@ export class VeiculosService {
       });
     }
 
-    this.veiculoConsulta.listaDebitos = listaIDs.toString();
+    veiculoConsulta.listaDebitos = listaIDs.toString();
 
     if (validoListaIDs === true) {
       try {
-        this.res = await this.client.GerarGuia(this.veiculoConsulta);
-        const guia: any = new GerarGuiaRetorno(this.res.GerarGuiaResult);
+        const res = await client.GerarGuia(veiculoConsulta);
+        const guia: any = new GerarGuiaRetorno(res.GerarGuiaResult);
         return new Retorno(guia);
       } catch (error) {
         return new Retorno({
@@ -331,10 +319,7 @@ export class VeiculosService {
     }
   }
 
-  async validaDPVATAnterior(
-    deb: Retorno,
-    listaIDs: Array<number>,
-  ): Promise<boolean> {
+  async validaDPVATAnterior( deb: Retorno, listaIDs: Array<number>): Promise<boolean> {
     try {
       for (const debito of deb.res) {
         if (debito.flagDpvatAnterior === 1) {

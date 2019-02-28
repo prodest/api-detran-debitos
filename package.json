@@ -31,6 +31,7 @@
     "@types/redis": "^2.8.8",
     "ajv": "^6.5.3",
     "apicache": "^1.2.3",
+    "async-redis": "^1.1.7",
     "axios": "^0.18.0",
     "cors": "^2.8.5",
     "cucumber": "^5.0.1",
