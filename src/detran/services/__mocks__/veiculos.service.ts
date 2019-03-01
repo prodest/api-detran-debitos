@@ -11,11 +11,11 @@ export class VeiculosService {
 
   async getDadosVeiculos( params ): Promise<any> {
     const veiculoRetorno = new VeiculoRetorno(params);
-    return new Retorno(veiculoRetorno);;
+    return new Retorno(veiculoRetorno);
   }
 
   async getDebitos( params ): Promise<any> {
-    const debitoRetorno = new DebitoRetorno(params)
+    const debitoRetorno = new DebitoRetorno(params);
     return new Retorno( debitoRetorno );
   }
 
@@ -25,7 +25,7 @@ export class VeiculosService {
   }
 
   async getTiposDebitos( params ): Promise<any> {
-    const debitoRetorno = new DebitoRetorno(params)
+    const debitoRetorno = new DebitoRetorno(params);
     return new Retorno( debitoRetorno );
   }
 

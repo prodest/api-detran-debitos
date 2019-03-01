@@ -15,13 +15,12 @@ import * as Redis from 'async-redis';
 export class VeiculosController {
   redisClient = Redis.createClient({
     port: process.env.REDIS_PORT,
-    host: process.env.REDIS_HOST
+    host: process.env.REDIS_HOST,
   });
-  
 
   constructor( private readonly veiculosService: VeiculosService ) {
-    this.redisClient.on("error", function (err) {
-      console.log("Error " + err);
+    this.redisClient.on('error', err => {
+      console.log('Error ' + err);
     });
    }
 
@@ -44,10 +43,10 @@ export class VeiculosController {
   } )
   async getDadosVeiculos( @Res() res: Response, @Param() params ) {
     try {
-      const resposta: Retorno = await this.veiculosService.getDadosVeiculos( params );
+      const resposta = await this.veiculosService.getDadosVeiculos( params );
       res.status( resposta.status ).send( resposta.res);
     } catch ( error ) {
-      throw new HttpException('Error ao fazer a requisição dos dados do veiculo.', HttpStatus.FORBIDDEN);
+      throw new HttpException('Error ao fazer a requisição dos dados do veiculo. ' + error, HttpStatus.FORBIDDEN);
     }
   }
 
@@ -106,7 +105,8 @@ export class VeiculosController {
 
   @Get( ':placa/:renavam/debitos-tipo/:tipo_debito' )
   @ApiOperation( {
-    description: 'Retorna uma lista de débitos do veiculo filtrada pelo tipo: LICENCIAMENTOATUAL, LICENCIAMETO ANTERIOR, IPVA, IPVAANTERIOR, DPVT, DPVATANTERIOR, MULTA',
+    description: 'Retorna uma lista de débitos do veiculo filtrada pelo tipo:\
+                  LICENCIAMENTOATUAL, LICENCIAMETO ANTERIOR, IPVA, IPVAANTERIOR, DPVT, DPVATANTERIOR, MULTA',
     title: 'Lista de débitos filtrado por tipo',
   } )
   @ApiResponse( { status: 200, description: 'Veiculo encontrado, retorna um array de debitos', type: Debito } )
@@ -152,15 +152,15 @@ export class VeiculosController {
     description: 'Renavam do veiculo',
     required: true,
   } )
-  async gerarGRU ( @Res() res: Response, @Param() params ) {
+  async gerarGRU( @Res() res: Response, @Param() params ) {
 
     try {
       const resposta: Retorno = await this.veiculosService.gerarGRU( params );
       this.redisClient.set(resposta.res.itensGuia[0].codigoBarra, resposta.res.guiaPDF);
-      this.redisClient.expire(resposta.res.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME));
+      this.redisClient.expire(resposta.res.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME, 10));
       res.status( resposta.status ).send( resposta.res );
     } catch ( error ) {
-      throw new HttpException( 'Erro ao gerar a GRU.'+error, HttpStatus.FORBIDDEN );
+      throw new HttpException( 'Erro ao gerar a GRU.' + error, HttpStatus.FORBIDDEN );
     }
   }
 
@@ -196,7 +196,7 @@ export class VeiculosController {
     try {
       const resposta: Retorno = await this.veiculosService.gerarGRUParcial( params);
       this.redisClient.set(resposta.res.itensGuia[0].codigoBarra, resposta.res.guiaPDF);
-      this.redisClient.expire(resposta.res.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME));
+      this.redisClient.expire(resposta.res.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME, 10));
       res.status( resposta.status ).send( resposta.res );
     } catch (error) {
       throw new HttpException('Erro ao gerar a GRU.', HttpStatus.FORBIDDEN);

@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { DetranSoapClient } from '../repository/detran-soap-client';
 import { Retorno } from '../models/retorno.model';
 import { VeiculoConsulta } from '../models/veiculoConsulta.model';
@@ -16,24 +16,26 @@ export class VeiculosService {
     this.detranSoapClient = new DetranSoapClient();
   }
 
-  async getDadosVeiculos(params: any): Promise<Retorno> {
+  async getDadosVeiculos(params: any): Promise<VeiculoRetorno> {
     const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
     const client = await this.detranSoapClient._client;
 
     if (Object.keys(client)[0] === 'mensagemErro') {
-      return new Retorno(client);
+      return client;
     }
 
     try {
-      const res  = await client.ObterDadosVeiculo(veiculoConsulta);
-      const veiculoRetorno: VeiculoRetorno = new VeiculoRetorno(
+      const res: Response = await client.ObterDadosVeiculo(veiculoConsulta);
+      console.log('RES >>>>>>>> ', typeof await client.ObterDadosVeiculo(veiculoConsulta));
+      /*let veiculoRetorno: VeiculoRetorno = new VeiculoRetorno(
         res.ObterDadosVeiculoResult,
       );
-      return new Retorno(veiculoRetorno);
+      return veiculoRetorno;*/
     } catch (error) {
-      return new Retorno({
-        mensagemErro: 'Erro ao obter os dados do veiculo.',
-      });
+      // return new Retorno({
+      //   mensagemErro: 'Erro ao obter os dados do veiculo.',
+      // });
+      throw new HttpException('Erro ao obter os dados do veiculo. ', HttpStatus.FORBIDDEN);
     }
   }
 
@@ -66,6 +68,7 @@ export class VeiculosService {
 
     try {
       const res = await client.ObterTiposDebitos(veiculoConsulta);
+      // console.log('RES >>>>>>>>>>>>> \n', res);
       const tipoDebito = new TipoDebito(
         res.ObterTiposDebitosResult.TipoDebito,
       );
@@ -81,7 +84,6 @@ export class VeiculosService {
   async getTiposDebitos(params: any): Promise<Retorno> {
     const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
     const client = await this.detranSoapClient._client;
-
 
     if (Object.keys(client)[0] === 'mensagemErro') {
       return new Retorno(client);
@@ -162,7 +164,6 @@ export class VeiculosService {
         try {
           switch (params.tipo_debito.toUpperCase()) {
             case TypeDeb.LICATUAL:
-              console.log
               validoListaIDs = await this.validaLicenciamentoAtual(deb, listaIDs);
               break;
             case TypeDeb.LICANTER:
@@ -271,7 +272,7 @@ export class VeiculosService {
         const index = listaIDs.indexOf(debito.idDebito);
         if (
           debito.flagIpvaExercicio === 1 ||
-          (Number(debito.ipvaCotas) <= ipvaCotasMaisNovo && debito.parcela != 0)
+          (Number(debito.ipvaCotas) <= ipvaCotasMaisNovo && debito.parcela !== 0)
         ) {
           if (index <= -1) {
             return false;

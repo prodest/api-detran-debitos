@@ -5,7 +5,7 @@ import { DebitosWS } from '../common/config/debitosWS.config';
 
 @Injectable()
 export class DetranSoapClient {
-    _client: any;
+    _client: any ;
     debitosWS: DebitosWS;
 
     constructor() {
@@ -22,6 +22,7 @@ export class DetranSoapClient {
             );
             return client;
         }).catch(error => {
+// tslint:disable-next-line: no-console
             console.error(error);
             return {
                 mensagemErro: 'Erro em conectar ao repositorio.',
