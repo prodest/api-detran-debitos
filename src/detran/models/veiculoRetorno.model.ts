@@ -11,7 +11,7 @@ export class VeiculoRetorno {
   renavam: number;
 
   @ApiModelProperty()
-  mensagemErro: string;
+  mensagemErro?: string;
 
   constructor(params: any) {
     if (Object.keys(params)[0] === 'MensagemErro') {

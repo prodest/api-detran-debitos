@@ -24,3 +24,8 @@ export enum ClassDeb {
   CLASSE13 = 'Pátio',
   CLASSE14 = 'Registro de Contrato',
 }
+
+export enum MsgErro {
+  CONT_GET_DADOS_VEIC = 'Não foi possivel requisitar os dados.',
+  SERV_GET_DADOS_VEIC = '',
+}

@@ -1,12 +1,11 @@
-import { ClassDeb } from "../../models/enum";
-
+import { ClassDeb } from '../../models/enum';
 
 export abstract class DefineClasseDebitos {
 
-    constructor (){ }
+    constructor(){ }
 
     defineClasse(classe: number): ClassDeb {
-        switch (classe) { 
+        switch (classe) {
           case 1:
             return ClassDeb.CLASSE1;
           case 2:

@@ -2,7 +2,7 @@ import { ItemGuia } from './itemGuia.model';
 
 export class GerarGuiaRetorno {
   itensGuia: Array<ItemGuia>;
-  mensagemErro: string;
+  mensagemErro?: string;
   guiaPDF: string;
 
   constructor(gerar_guia: any) {

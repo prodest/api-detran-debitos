@@ -11,7 +11,7 @@ export class VeiculoRetorno {
   renavam: number;
 
   @ApiModelProperty()
-  mensagemErro: string;
+  mensagemErro?: string;
 
   constructor(params: any) {
     if (params.placa === 'VAL1705' && params.renavam === '98765432101') {

@@ -23,7 +23,7 @@ export class TipoDebito {
   temDPVATAnterior: string;
 
   @ApiModelProperty()
-  mensagemErro: string;
+  mensagemErro?: string;
 
   constructor(tipoDeb: any) {
     this.temLicenciamentoAnual = 'S';

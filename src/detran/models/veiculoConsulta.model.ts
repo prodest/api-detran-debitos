@@ -6,16 +6,18 @@ export class VeiculoConsulta {
   veiculoConsulta: Veiculo;
 
   @ApiModelProperty()
-  tipoSelecionado: string;
+  tipoSelecionado?: string;
 
   @ApiModelProperty()
-  listaDebitos: string;
+  listaDebitos?: string;
 
   constructor(params) {
     this.veiculoConsulta = new Veiculo(params);
     if (params.tipo_debito){
       this.tipoSelecionado = params.tipo_debito.toUpperCase();
     }
-    
+    if (params.listaIDs){
+      this.listaDebitos = params.listaIDs;
+    }
   }
 }

@@ -6,7 +6,7 @@ export class DebitoRetorno {
   debitos: Array<any>;
 
   @ApiModelProperty()
-  mensagemErro: string;
+  mensagemErro?: string;
 
   constructor(debits: any) {
     this.debitos = new Array();

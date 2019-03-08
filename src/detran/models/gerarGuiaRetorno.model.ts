@@ -6,7 +6,7 @@ export class GerarGuiaRetorno {
   itensGuia: Array<ItemGuia>;
 
   @ApiModelProperty()
-  mensagemErro: string;
+  mensagemErro?: string;
 
   @ApiModelProperty()
   guiaPDF: string;

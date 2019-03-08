@@ -1,14 +1,14 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiModelProperty } from '@nestjs/swagger';
 
-export class Retorno {
+export class Retorno<T> {
   @ApiModelProperty()
-  public res: any;
+  public res: T;
 
   @ApiModelProperty()
-  public status: number;
+  public status: HttpStatus;
 
-  constructor(resposta: any) {
+  constructor(resposta: T) {
     this.res = resposta;
 
     if (
