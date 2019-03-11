@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { DefineClasseDebitos } from '../common/config/defineClasseDebitos.config';
-import { ClassDeb } from './enum';
+import { ClassDeb } from './enuns/classDeb.enum';
 
 export class ItemGuia extends DefineClasseDebitos {
   @ApiModelProperty()

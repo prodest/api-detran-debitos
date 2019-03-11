@@ -14,8 +14,8 @@ export class VeiculoRetorno {
   mensagemErro?: string;
 
   constructor(params: any) {
-    if (Object.keys(params)[0] === 'MensagemErro') {
-      this.mensagemErro = params.MensagemErro;
+    if (Object.keys(params)[0] === 'MensagemErro' || Object.keys(params)[0] === 'mensagemErro') {
+      this.mensagemErro = params.MensagemErro || params.mensagemErro;
     } else {
       this.placa = params.VeiculoInfo.Veiculo.Placa;
       this.modelo = params.VeiculoInfo.MarcaModelo;

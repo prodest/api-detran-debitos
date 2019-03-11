@@ -1,8 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { VeiculosService } from './veiculos.service';
+import { MsgErro } from '../models/enuns/msgErro.enum';
+import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
+
 jest.mock( './veiculos.service' );
 
-let params: any;
+let params: ControllerVeiculosParams;
 let respostaDoTeste: any;
 
 describe( 'VeiculosService', () => {
@@ -20,7 +23,7 @@ describe( 'VeiculosService', () => {
       renavam: '98765432101',
     };
     respostaDoTeste = await service.getDadosVeiculos( params );
-    expect( Object.keys(respostaDoTeste.res)[0])
+    expect( Object.keys(respostaDoTeste)[0])
       .toBe( 'placa' );
   } );
 
@@ -30,7 +33,7 @@ describe( 'VeiculosService', () => {
       renavam: '12345678910',
     };
     respostaDoTeste = await service.getDadosVeiculos(  params );
-    expect( respostaDoTeste.res.mensagemErro )
+    expect( respostaDoTeste.mensagemErro )
       .toBe( 'Veículo não encontrado.' );
   } );
 
@@ -40,7 +43,7 @@ describe( 'VeiculosService', () => {
       renavam: '12345678910',
     };
     respostaDoTeste = await service.getDadosVeiculos(  params );
-    expect( respostaDoTeste.res.mensagemErro )
+    expect( respostaDoTeste.mensagemErro )
       .toBe( 'Consulta não permitida para veículo com registro de furto/roubo ativo' );
   } );
 
@@ -50,9 +53,9 @@ describe( 'VeiculosService', () => {
       placa: 'VAL1705',
       renavam: '98765432101',
     };
-    respostaDoTeste = await service.getDebitos(  params );
+    respostaDoTeste = await service.getDebitos( params );
 
-    expect( respostaDoTeste.res.debitos[0].descricaoServico )
+    expect( respostaDoTeste.debitos[0].descricaoServico )
       .toBe( 'Licenciamento Anual 2018' );
   } );
 
@@ -61,9 +64,9 @@ describe( 'VeiculosService', () => {
       placa: 'XXX0000',
       renavam: '12345678910',
     };
-    respostaDoTeste = await service.getDebitos(  params );
-    expect( respostaDoTeste.res.debitos[0] )
-      .toBe( 'Não foram encontrados debitos para esse veiculo.' );
+    respostaDoTeste = await service.getDebitos( params );
+    expect( respostaDoTeste.debitos[0] )
+      .toBe( MsgErro.DEB_RET_VAZIO );
   } );
 
   /* getDebitosPreview() */
@@ -72,8 +75,8 @@ describe( 'VeiculosService', () => {
       placa: 'VAL1705',
       renavam: '98765432101',
     };
-    respostaDoTeste = await service.getDebitosPreview(  params );
-    expect( Object.keys(respostaDoTeste.res)[0] )
+    respostaDoTeste = await service.getDebitosPreview( params );
+    expect( Object.keys(respostaDoTeste)[0] )
       .toBe( 'temLicenciamentoAnual' );
   } );
 
@@ -84,8 +87,8 @@ describe( 'VeiculosService', () => {
       renavam: '98765432101',
       tipo_debito: 'IPVA',
     };
-    respostaDoTeste = await service.getTiposDebitos(  params );
-    expect( respostaDoTeste.res.debitos[0].descricaoServico )
+    respostaDoTeste = await service.getTiposDebitos( params );
+    expect( respostaDoTeste.debitos[0].descricaoServico )
       .toBe( 'IPVA 4ª Cota 2018' );
   } );
 
@@ -96,7 +99,7 @@ describe( 'VeiculosService', () => {
       renavam: '98765432101',
     };
     respostaDoTeste = await service.gerarGRU( params );
-    expect( Object.keys(respostaDoTeste.res)[0] )
+    expect( Object.keys(respostaDoTeste)[0] )
       .toBe( 'itensGuia' );
   } );
 
@@ -108,7 +111,7 @@ describe( 'VeiculosService', () => {
       listaIDs: '78994446,84677037',
     };
     respostaDoTeste = await service.gerarGRU( params );
-    expect( Object.keys(respostaDoTeste.res)[0] )
+    expect( Object.keys(respostaDoTeste)[0] )
       .toBe( 'itensGuia' );
   } );
 
@@ -120,7 +123,7 @@ describe( 'VeiculosService', () => {
       listaIDs: '84677037',
     };
     respostaDoTeste = await service.gerarGRU( params );
-    expect( Object.keys(respostaDoTeste.res)[0] )
+    expect( Object.keys(respostaDoTeste)[0] )
       .toBe( 'mensagemErro' );
   } );
 
@@ -130,7 +133,7 @@ describe( 'VeiculosService', () => {
       renavam: '98765432101',
     };
     respostaDoTeste = await service.gerarGRU( params );
-    expect( Object.keys(respostaDoTeste.res)[0] )
+    expect( Object.keys(respostaDoTeste)[0] )
       .toBe( 'mensagemErro' );
   } );
 

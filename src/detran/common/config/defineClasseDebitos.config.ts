@@ -1,4 +1,5 @@
-import { ClassDeb } from '../../models/enum';
+import { ClassDeb } from "../../models/enuns/classDeb.enum";
+
 
 export abstract class DefineClasseDebitos {
 

@@ -1,13 +1,16 @@
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
-import { DetranSoapClient } from '../repository/detran-soap-client';
-import { Retorno } from '../models/retorno.model';
-import { VeiculoConsulta } from '../models/veiculoConsulta.model';
-import { VeiculoRetorno } from '../models/veiculoRetorno.model';
+import { Injectable } from '@nestjs/common';
+
+import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
+import { MensagemErro } from '../common/mensagemErro';
 import { DebitoRetorno } from '../models/debitoRetorno.model';
+import { MsgErro } from '../models/enuns/msgErro.enum';
+import { TypeDeb } from '../models/enuns/typeDeb.enum';
 import { GerarGuiaRetorno } from '../models/gerarGuiaRetorno.model';
 import { TipoDebito } from '../models/tipoDebito.model';
-import { TypeDeb } from '../models/enum';
-import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
+import { VeiculoConsulta } from '../models/veiculoConsulta.model';
+import { VeiculoRetorno } from '../models/veiculoRetorno.model';
+import { DetranSoapClient } from '../repository/detran-soap-client';
+
 
 @Injectable()
 export class VeiculosService {
@@ -17,99 +20,123 @@ export class VeiculosService {
     this.detranSoapClient = new DetranSoapClient();
   }
 
-  async getDadosVeiculos(params: ControllerVeiculosParams): Promise<Retorno<VeiculoRetorno>> {
+  async getDadosVeiculos(params: ControllerVeiculosParams): Promise<VeiculoRetorno> {
     const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
     const client = await this.detranSoapClient._client;
 
     if (Object.keys(client)[0] === 'mensagemErro') {
-      return new Retorno(client);
+      throw new MensagemErro(client.mensagemErro);
     }
 
     try {
       const res = await client.ObterDadosVeiculo(veiculoConsulta);
       const veiculoRetorno = new VeiculoRetorno(res.ObterDadosVeiculoResult);
-      return new Retorno<VeiculoRetorno>(veiculoRetorno);
+      if(veiculoRetorno.mensagemErro){
+        throw new MensagemErro(veiculoRetorno.mensagemErro);
+      }
+      return veiculoRetorno;
     } catch (error) {
-      throw new HttpException('Erro ao obter os dados do veiculo. ', HttpStatus.FORBIDDEN);
+      let mensagem: string = MsgErro.SERV_GET_DADOS_VEIC;
+      if (Object.keys(error)[0] === 'mensagem'){
+        mensagem = mensagem+' '+error.mensagem;
+      }
+      throw new MensagemErro(mensagem);
     }
   }
 
-  async getDebitos(params: ControllerVeiculosParams): Promise<Retorno<DebitoRetorno>> {
+  async getDebitos(params: ControllerVeiculosParams): Promise<DebitoRetorno> {
     const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
     const client = await this.detranSoapClient._client;
 
     if (Object.keys(client)[0] === 'mensagemErro') {
-      return new Retorno(client);
+      throw new MensagemErro(client.mensagemErro);
     }
 
     try {
       const res = await client.ObterDebitos(veiculoConsulta);
       const debitos = new DebitoRetorno(res.ObterDebitosResult);
-      return new Retorno<DebitoRetorno>(debitos);
+      if(debitos.mensagemErro){
+        throw new MensagemErro(debitos.mensagemErro);
+      }
+      return debitos;
     } catch (error) {
-      throw new HttpException( 'Erro ao obter debitos.', HttpStatus.FORBIDDEN);
+      let mensagem: string = MsgErro.SERV_GET_DEB;
+      if (Object.keys(error)[0] === 'mensagem'){
+        mensagem = mensagem+' '+error.mensagem;
+      }
+      throw new MensagemErro(mensagem);
     }
   }
 
-  async getDebitosPreview(params: ControllerVeiculosParams): Promise<Retorno<TipoDebito>> {
+  async getDebitosPreview(params: ControllerVeiculosParams): Promise<TipoDebito> {
     const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
     const client = await this.detranSoapClient._client;
 
     if (Object.keys(client)[0] === 'mensagemErro') {
-      return new Retorno(client);
+      throw new MensagemErro(client.mensagemErro);
     }
 
     try {
       const res = await client.ObterTiposDebitos(veiculoConsulta);
-      const tipoDebito = new TipoDebito(res.ObterTiposDebitosResult.TipoDebito);
-
-      return new Retorno<TipoDebito>(tipoDebito);
+      const tipoDebito = new TipoDebito(res.ObterTiposDebitosResult);
+      if(tipoDebito.mensagemErro){
+        throw new MensagemErro(tipoDebito.mensagemErro);
+      }
+      return tipoDebito;
     } catch (error) {
-      throw new HttpException('Erro ao buscar debitos.', HttpStatus.FORBIDDEN);
+      let mensagem: string = MsgErro.SERV_GET_DEB_PREV;
+      if (Object.keys(error)[0] === 'mensagem'){
+        mensagem = mensagem+' '+error.mensagem;
+      }
+      throw new MensagemErro(mensagem);
     }
   }
 
-  async getTiposDebitos(params: ControllerVeiculosParams): Promise<Retorno<DebitoRetorno>> {
+  async getTiposDebitos(params: ControllerVeiculosParams): Promise<DebitoRetorno> {
     const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
     const client = await this.detranSoapClient._client;
 
     if (Object.keys(client)[0] === 'mensagemErro') {
-      return new Retorno(client);
+      throw new MensagemErro(client.mensagemErro);
     }
 
     try {
       const res = await client.ObterDebitosPorTipoDebito(veiculoConsulta);
       const debitos = new DebitoRetorno(res.ObterDebitosPorTipoDebitoResult);
-      return new Retorno<DebitoRetorno>(debitos);
+      if(debitos.mensagemErro){
+        throw new MensagemErro(debitos.mensagemErro);
+      }
+      return debitos;
     } catch (error) {
-      throw new HttpException('Erro ao buscar os debitos.', HttpStatus.FORBIDDEN);
+      let mensagem: string = MsgErro.SERV_GET_DEB;
+      if (Object.keys(error)[0] === 'mensagem'){
+        mensagem = mensagem+' '+error.mensagem;
+      }
+      throw new MensagemErro(mensagem);
     }
   }
 
-  async gerarGRU(params: ControllerVeiculosParams): Promise<Retorno<GerarGuiaRetorno>> {
+  async gerarGRU(params: ControllerVeiculosParams): Promise<GerarGuiaRetorno> {
     const veiculoConsulta = new VeiculoConsulta(params);
     const client = await this.detranSoapClient._client;
     const array_ids: Array<string> = new Array();
 
     if (Object.keys(client)[0] === 'mensagemErro') {
-      return new Retorno(client);
+      throw new MensagemErro(client.mensagemErro);
     }
 
     try {
-      let deb: Retorno<DebitoRetorno> = await this.getDebitos(params);
-      if (
-        deb.res[0] === 'Não foram encontrados debitos para esse veiculo.' ||
-        deb.status !== HttpStatus.OK
-      ) {
-        return deb;
+      let deb: DebitoRetorno = await this.getDebitos(params);
+      if (deb.debitos[0] === MsgErro.DEB_RET_VAZIO) {
+        throw new MensagemErro(deb.debitos[0]);
       } else {
         deb = await this.verificaIpvaCotaUnica(params, deb);
-        for (const debito of deb.res.debitos) {
+        for (const debito of deb.debitos) {
           array_ids.push(debito.idDebito);
         }
       }
     } catch (error) {
-        throw new HttpException('Erro ao buscar os debitos.', HttpStatus.FORBIDDEN);
+        throw new MensagemErro(MsgErro.SERV_GERAR_GUIA_DEB);
     }
 
     veiculoConsulta.listaDebitos = array_ids.toString();
@@ -117,41 +144,37 @@ export class VeiculosService {
     try {
       const res = await client.GerarGuia(veiculoConsulta);
       const guia: GerarGuiaRetorno = new GerarGuiaRetorno(res.GerarGuiaResult);
-      return new Retorno(guia);
+      if(guia.mensagemErro){
+        throw new MensagemErro(guia.mensagemErro);
+      }
+      return guia;
     } catch (error) {
-      throw new HttpException('Error ao gerar a GRU.', HttpStatus.FORBIDDEN);
+      let mensagem: string = MsgErro.SERV_GERAR_GUIA;
+      if (Object.keys(error)[0] === 'mensagem'){
+        mensagem = mensagem+' '+error.mensagem;
+      }
+      throw new MensagemErro(mensagem);
     }
   }
 
-  async gerarGRUParcial(params: ControllerVeiculosParams): Promise<Retorno<GerarGuiaRetorno>> {
+  async gerarGRUParcial(params: ControllerVeiculosParams, listaIDs: Array<number>): Promise<GerarGuiaRetorno> {
     const veiculoConsulta = new VeiculoConsulta(params);
     const client = await this.detranSoapClient._client;
     let validoListaIDs: boolean;
-    let deb: Retorno<DebitoRetorno>;
-
-    const listaIDs: Array<number> = params.listaIDs.split(',').map(Number);
+    let deb: DebitoRetorno;
 
     try {
       deb = await this.getTiposDebitos(params);
-      if (
-        deb.res[0] === 'Não foram encontrados debitos para esse veiculo.' ||
-        deb.status !== HttpStatus.OK
-      ) {
+      if (deb[0] === MsgErro.DEB_RET_VAZIO) {
         validoListaIDs = false;
       } else {
         try {
           switch (params.tipo_debito.toUpperCase()) {
             case TypeDeb.LICATUAL:
-              validoListaIDs = await this.validaLicenciamentoAtual(
-                deb,
-                listaIDs,
-              );
+              validoListaIDs = await this.validaLicenciamentoAtual(deb, listaIDs);
               break;
             case TypeDeb.LICANTER:
-              validoListaIDs = await this.validaLicenciamentoAnterior(
-                deb,
-                listaIDs,
-              );
+              validoListaIDs = await this.validaLicenciamentoAnterior(deb, listaIDs);
               break;
             case TypeDeb.IPVAATUAL:
               validoListaIDs = await this.validaIPVA(deb, listaIDs);
@@ -169,14 +192,14 @@ export class VeiculosService {
               validoListaIDs = await this.validaMulta(deb, listaIDs);
               break;
             default:
-            throw new HttpException('Tipo não cadastrado.', HttpStatus.FORBIDDEN);
+            throw new MensagemErro(MsgErro.SERV_GERAR_GUIA_TYP);
           }
         } catch (error) {
-          throw new HttpException('Error ao validar debitos. Tente novamente mais tarde.', HttpStatus.FORBIDDEN);
+          throw new MensagemErro(MsgErro.SERV_GERAR_GUIA_VAL);
         }
       }
     } catch (error) {
-      throw new HttpException('Error ao validar a lista de debitos.', HttpStatus.FORBIDDEN);
+      throw new MensagemErro(MsgErro.SERV_GERAR_GUIA_VAL);
     }
 
     veiculoConsulta.listaDebitos = listaIDs.toString();
@@ -185,21 +208,25 @@ export class VeiculosService {
       try {
         const res = await client.GerarGuia(veiculoConsulta);
         const guia: GerarGuiaRetorno = new GerarGuiaRetorno(res.GerarGuiaResult);
-        return new Retorno<GerarGuiaRetorno>(guia);
+        if(guia.mensagemErro){
+          throw new MensagemErro(guia.mensagemErro);
+        }
+        return guia;
       } catch (error) {
-        throw new HttpException('Error ao gerar a GRU.', HttpStatus.FORBIDDEN);
+        let mensagem: string = MsgErro.SERV_GERAR_GUIA;
+        if (Object.keys(error)[0] === 'mensagem'){
+          mensagem = mensagem+' '+error.mensagem;
+        }
+        throw new MensagemErro(mensagem);
       }
     } else {
-      throw new HttpException('Debitos obrigatorios não foram passados.', HttpStatus.FORBIDDEN);
+      throw new MensagemErro(MsgErro.SERV_GERAR_GUIA_OBR);
     }
   }
 
-  async validaLicenciamentoAtual(
-    deb: Retorno<DebitoRetorno>,
-    listaIDs: Array<number>,
-  ): Promise<boolean> {
+  async validaLicenciamentoAtual(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
     try {
-      for (const debito of deb.res.debitos) {
+      for (const debito of deb.debitos) {
         if (debito.flagLicenciamentoExercicio === 1) {
           const index = listaIDs.indexOf(debito.idDebito);
           if (index <= -1) {
@@ -213,12 +240,9 @@ export class VeiculosService {
     }
   }
 
-  async validaLicenciamentoAnterior(
-    deb: Retorno<DebitoRetorno>,
-    listaIDs: Array<number>,
-  ): Promise<boolean> {
+  async validaLicenciamentoAnterior(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
     try {
-      for (const debito of deb.res.debitos) {
+      for (const debito of deb.debitos) {
         if (debito.flagLicenciamentoAnterior === 1) {
           const index = listaIDs.indexOf(debito.idDebito);
           if (index <= -1) {
@@ -232,17 +256,17 @@ export class VeiculosService {
     }
   }
 
-  async validaIPVA(deb: Retorno<DebitoRetorno>, listaIDs: Array<number>): Promise<boolean> {
+  async validaIPVA(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
     let ipvaCotasMaisNovo: number = 0;
     try {
-      for (const debito of deb.res.debitos) {
+      for (const debito of deb.debitos) {
         const index = listaIDs.indexOf(debito.idDebito);
         if (index > -1 && ipvaCotasMaisNovo < Number(debito.ipvaCotas)) {
           ipvaCotasMaisNovo = Number(debito.ipvaCotas);
         }
       }
 
-      for (const debito of deb.res.debitos) {
+      for (const debito of deb.debitos) {
         const index = listaIDs.indexOf(debito.idDebito);
         if (
           debito.flagIpvaExercicio === 1 ||
@@ -260,12 +284,9 @@ export class VeiculosService {
     }
   }
 
-  async validaIPVAAnterior(
-    deb: Retorno<DebitoRetorno>,
-    listaIDs: Array<number>,
-  ): Promise<boolean> {
+  async validaIPVAAnterior(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
     try {
-      for (const debito of deb.res.debitos) {
+      for (const debito of deb.debitos) {
         const index = listaIDs.indexOf(debito.idDebito);
         if (debito.flagIpvaAnterior === 1) {
           if (index <= -1) {
@@ -279,9 +300,9 @@ export class VeiculosService {
     }
   }
 
-  async validaDPVAT(deb: Retorno<DebitoRetorno>, listaIDs: Array<number>): Promise<boolean> {
+  async validaDPVAT(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
     try {
-      for (const debito of deb.res.debitos) {
+      for (const debito of deb.debitos) {
         if (debito.flagDpvatExercicio === 1) {
           const index = listaIDs.indexOf(debito.idDebito);
           if (index <= -1) {
@@ -295,12 +316,9 @@ export class VeiculosService {
     }
   }
 
-  async validaDPVATAnterior(
-    deb: Retorno<DebitoRetorno>,
-    listaIDs: Array<number>,
-  ): Promise<boolean> {
+  async validaDPVATAnterior(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
     try {
-      for (const debito of deb.res.debitos) {
+      for (const debito of deb.debitos) {
         if (debito.flagDpvatAnterior === 1) {
           const index = listaIDs.indexOf(debito.idDebito);
           if (index <= -1) {
@@ -314,9 +332,9 @@ export class VeiculosService {
     }
   }
 
-  async validaMulta(deb: Retorno<DebitoRetorno>, listaIDs: Array<number>): Promise<boolean> {
+  async validaMulta(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
     try {
-      for (const debito of deb.res.debitos) {
+      for (const debito of deb.debitos) {
         if (debito.flagMulta === 1) {
           const index = listaIDs.indexOf(debito.idDebito);
           if (index <= -1) {
@@ -330,16 +348,16 @@ export class VeiculosService {
     }
   }
 
-  async verificaIpvaCotaUnica(params: any, debitos: Retorno<DebitoRetorno>): Promise<Retorno<any>> {
+  async verificaIpvaCotaUnica(params: any, debitos: DebitoRetorno): Promise<DebitoRetorno> {
     let ipvaCotaUnica: boolean = false;
     let cotaUniExerc: number = -1;
     const regExIpvaCotas = /^\d{4}0$/g;
-    let ipvaDebitos: Retorno<DebitoRetorno>;
+    let ipvaDebitos: DebitoRetorno;
 
     params.tipo_debito = 'ipva';
     ipvaDebitos = await this.getTiposDebitos(params);
 
-    for (const ipvadeb of ipvaDebitos.res.debitos) {
+    for (const ipvadeb of ipvaDebitos.debitos) {
       if (regExIpvaCotas.test(ipvadeb.ipvaCotas)) {
         ipvaCotaUnica = true;
         cotaUniExerc = ipvadeb.exercicio;
@@ -348,12 +366,12 @@ export class VeiculosService {
     }
 
     if (ipvaCotaUnica) {
-      for (const ipvadeb of ipvaDebitos.res.debitos) {
+      for (const ipvadeb of ipvaDebitos.debitos) {
         if (ipvadeb.exercicio === cotaUniExerc && ipvadeb.parcela !== 0) {
-          const result = debitos.res.debitos.findIndex(
+          const result = debitos.debitos.findIndex(
             obj => obj.idDebito === ipvadeb.idDebito,
           );
-          debitos.res.debitos.splice(result, 1);
+          debitos.debitos.splice(result, 1);
         }
       }
     }

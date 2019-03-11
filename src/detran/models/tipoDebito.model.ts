@@ -1,26 +1,27 @@
 import { ApiModelProperty } from '@nestjs/swagger';
+import { MsgErro } from './enuns/msgErro.enum';
 
 export class TipoDebito {
   @ApiModelProperty()
-  temLicenciamentoAtual: string;
+  temLicenciamentoAtual: boolean;
 
   @ApiModelProperty()
-  temLicenciamentoAnterior: string;
+  temLicenciamentoAnterior: boolean;
 
   @ApiModelProperty()
-  temDPVAT: string;
+  temDPVAT: boolean;
 
   @ApiModelProperty()
-  temIPVA: string;
+  temIPVA: boolean;
 
   @ApiModelProperty()
-  temMulta: string;
+  temMulta: boolean;
 
   @ApiModelProperty()
-  temIPVAAnterior: string;
+  temIPVAAnterior: boolean;
 
   @ApiModelProperty()
-  temDPVATAnterior: string;
+  temDPVATAnterior: boolean;
 
   @ApiModelProperty()
   mensagemErro?: string;
@@ -29,15 +30,24 @@ export class TipoDebito {
     if (Object.keys(tipoDeb)[0] === 'MensagemErro') {
       this.mensagemErro = tipoDeb.MensagemErro;
     } else if (tipoDeb === null || tipoDeb === undefined) {
-      this.mensagemErro = 'Erro ao gerar tipoDebito';
+      this.mensagemErro = MsgErro.MODL_TIPO_DEB_ERR;
     } else {
-      this.temLicenciamentoAtual = tipoDeb.TemLicenciamentoAtual;
-      this.temLicenciamentoAnterior = tipoDeb.TemLicenciamentoAnterior;
-      this.temDPVAT = tipoDeb.TemDPVAT;
-      this.temIPVA = tipoDeb.TemIPVA;
-      this.temMulta = tipoDeb.TemMulta;
-      this.temIPVAAnterior = tipoDeb.TemIPVAAnterior;
-      this.temDPVATAnterior = tipoDeb.TemDPVATAnterior;
+      this.temLicenciamentoAtual = this.convert2boolean(tipoDeb.TipoDebito.TemLicenciamentoAtual);
+      this.temLicenciamentoAnterior = this.convert2boolean(tipoDeb.TipoDebito.TemLicenciamentoAnterior);
+      this.temDPVAT = this.convert2boolean(tipoDeb.TipoDebito.TemDPVAT);
+      this.temIPVA = this.convert2boolean(tipoDeb.TipoDebito.TemIPVA);
+      this.temMulta = this.convert2boolean(tipoDeb.TipoDebito.TemMulta);
+      this.temIPVAAnterior = this.convert2boolean(tipoDeb.TipoDebito.TemIPVAAnterior);
+      this.temDPVATAnterior = this.convert2boolean(tipoDeb.TipoDebito.TemDPVATAnterior);
     }
+  }
+
+  private convert2boolean(str: string){
+    if(str === 'S'){
+      return true;
+    }else{
+      return false;
+    }
+
   }
 }

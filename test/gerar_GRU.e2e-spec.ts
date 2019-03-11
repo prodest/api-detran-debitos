@@ -71,7 +71,7 @@ defineFeature( feature, test => {
     } );
     then( 'o sistema retorna uma mensagem informando que é necessário selecionar os outros débitos obrigatórios', () => {
       dataVehicle = resposta.body;
-      expect( Object.keys( dataVehicle )[0] ).toContain( 'mensagemErro' );
+      expect( dataVehicle.message ).toContain( 'Debitos obrigatorios não foram passados.' );
     } );
   } );
 
@@ -113,7 +113,7 @@ defineFeature( feature, test => {
     } );
     then( 'o sistema retorna uma mensagem informando que não é possivel escolher a cota única e as demais cotas de IPVA para o mesmo exercício', () => {
       dataVehicle = resposta.body;
-      expect( Object.keys( dataVehicle )[0] ).toContain( 'mensagemErro' );
+      expect( dataVehicle.message ).toContain( 'Não é possível escolher cota única e as demais cotas de IPVA para o mesmo exercício. Verifique conjunto de débitos.' );
     } );
   } );
 
