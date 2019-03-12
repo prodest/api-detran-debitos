@@ -2,36 +2,36 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 export class TipoDebito {
   @ApiModelProperty()
-  temLicenciamentoAnual: string;
+  temLicenciamentoAnual: boolean;
 
   @ApiModelProperty()
-  temLicenciamentoAnterior: string;
+  temLicenciamentoAnterior: boolean;
 
   @ApiModelProperty()
-  temDPVAT: string;
+  temDPVAT: boolean;
 
   @ApiModelProperty()
-  temIPVA: string;
+  temIPVA: boolean;
 
   @ApiModelProperty()
-  temMulta: string;
+  temMulta: boolean;
 
   @ApiModelProperty()
-  temIPVAAnterior: string;
+  temIPVAAnterior: boolean;
 
   @ApiModelProperty()
-  temDPVATAnterior: string;
+  temDPVATAnterior: boolean;
 
   @ApiModelProperty()
   mensagemErro?: string;
 
   constructor(tipoDeb: any) {
-    this.temLicenciamentoAnual = 'S';
-    this.temLicenciamentoAnterior = 'N';
-    this.temDPVAT = 'S';
-    this.temIPVA = 'S';
-    this.temMulta = 'N';
-    this.temIPVAAnterior = 'S';
-    this.temDPVATAnterior = 'N';
+    this.temLicenciamentoAnual = true;
+    this.temLicenciamentoAnterior = false;
+    this.temDPVAT = true;
+    this.temIPVA = true;
+    this.temMulta = false;
+    this.temIPVAAnterior = true;
+    this.temDPVATAnterior = false;
   }
 }

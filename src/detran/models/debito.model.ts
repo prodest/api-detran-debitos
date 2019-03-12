@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { DefineClasseDebitos } from '../common/config/defineClasseDebitos.config';
-import { ClassDeb } from './__mocks__/enum';
+import { ClassDeb } from './enuns/classDeb.enum';
 
 export class Debito extends DefineClasseDebitos{
   @ApiModelProperty({
@@ -19,7 +19,7 @@ export class Debito extends DefineClasseDebitos{
       'Placas',
       'Pátio',
       'Registro de Contrato',
-    ]
+    ],
   })
   classe: ClassDeb;
 

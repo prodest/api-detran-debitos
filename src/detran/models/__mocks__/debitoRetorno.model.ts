@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Debito } from './debito.model';
+import { MsgErro } from './enuns/msgErro.enum';
 
 export class DebitoRetorno {
   @ApiModelProperty()
@@ -12,7 +13,7 @@ export class DebitoRetorno {
     this.debitos = new Array();
 
     if (debits.placa !== 'VAL1705') {
-      this.debitos.push('Não foram encontrados debitos para esse veiculo.');
+      this.debitos.push(MsgErro.DEB_RET_VAZIO);
     } else {
       this.debitos.push(new Debito(debits));
     }

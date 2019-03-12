@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { ClassDeb } from './enum';
+import { ClassDeb } from './enuns/classDeb.enum';
 
 export class Debito {
   @ApiModelProperty()
