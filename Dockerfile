@@ -1,4 +1,4 @@
-FROM registry.es.gov.br/espm/infraestrutura/containers/node:8.12.0
+FROM registry.es.gov.br/espm/infraestrutura/containers/node:10.15.3
 
 RUN mkdir -p /usr/app/src
 WORKDIR /usr/app
