@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Retorno } from '../../models/__mocks__/retorno.model';
 import { VeiculoRetorno } from '../../models/__mocks__/veiculoRetorno.model';
 import { DebitoRetorno } from '../../models/__mocks__/debitoRetorno.model';
 import { TipoDebito } from '../../models/__mocks__/tipoDebito.model';
@@ -8,7 +7,6 @@ import { MensagemErro } from '../../common/mensagemErro';
 
 @Injectable()
 export class VeiculosService {
-  resposta: Retorno;
 
   async getDadosVeiculos( params ): Promise<VeiculoRetorno> {
     const veiculoRetorno = new VeiculoRetorno(params);

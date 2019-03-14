@@ -10,6 +10,12 @@ import { TipoDebito } from '../models/tipoDebito.model';
 import { VeiculoConsulta } from '../models/veiculoConsulta.model';
 import { VeiculoRetorno } from '../models/veiculoRetorno.model';
 import { DetranSoapClient } from '../repository/detran-soap-client';
+import { ObterDadosVeiculoResponseDTO } from '../models/wsib/obterDadosVeiculoResponse.dto';
+import { ObterDebitosResponseDTO } from 'detran/models/wsib/obterDebitosResponse.dto';
+import { ObterTiposDebitosResponse } from 'detran/models/wsib/obterTiposDebitosResponse.dto';
+import { ObterDebitosPorTipoDebitoResponseDTO } from 'detran/models/wsib/obterDebitosPorTipoDebitoResponse.dto';
+import { GerarGuiaResponseDTO } from 'detran/models/wsib/gerarGuiaResponse.dto';
+import { GerarGuiaResponseDTO } from 'detran/models/wsib/gerarGuiaResponse.dto';
 
 
 @Injectable()
@@ -29,7 +35,7 @@ export class VeiculosService {
     }
 
     try {
-      const res = await client.ObterDadosVeiculo(veiculoConsulta);
+      const res: ObterDadosVeiculoResponseDTO = await client.ObterDadosVeiculo(veiculoConsulta);
       const veiculoRetorno = new VeiculoRetorno(res.ObterDadosVeiculoResult);
       if(veiculoRetorno.mensagemErro){
         throw new MensagemErro(veiculoRetorno.mensagemErro);
@@ -53,7 +59,8 @@ export class VeiculosService {
     }
 
     try {
-      const res = await client.ObterDebitos(veiculoConsulta);
+      const res: ObterDebitosResponseDTO = await client.ObterDebitos(veiculoConsulta);
+      console.log(res)
       const debitos = new DebitoRetorno(res.ObterDebitosResult);
       if(debitos.mensagemErro){
         throw new MensagemErro(debitos.mensagemErro);
@@ -77,7 +84,7 @@ export class VeiculosService {
     }
 
     try {
-      const res = await client.ObterTiposDebitos(veiculoConsulta);
+      const res: ObterTiposDebitosResponse = await client.ObterTiposDebitos(veiculoConsulta);
       const tipoDebito = new TipoDebito(res.ObterTiposDebitosResult);
       if(tipoDebito.mensagemErro){
         throw new MensagemErro(tipoDebito.mensagemErro);
@@ -101,7 +108,7 @@ export class VeiculosService {
     }
 
     try {
-      const res = await client.ObterDebitosPorTipoDebito(veiculoConsulta);
+      const res: ObterDebitosPorTipoDebitoResponseDTO = await client.ObterDebitosPorTipoDebito(veiculoConsulta);
       const debitos = new DebitoRetorno(res.ObterDebitosPorTipoDebitoResult);
       if(debitos.mensagemErro){
         throw new MensagemErro(debitos.mensagemErro);
@@ -142,7 +149,7 @@ export class VeiculosService {
     veiculoConsulta.listaDebitos = array_ids.toString();
 
     try {
-      const res = await client.GerarGuia(veiculoConsulta);
+      const res: GerarGuiaResponseDTO = await client.GerarGuia(veiculoConsulta);
       const guia: GerarGuiaRetorno = new GerarGuiaRetorno(res.GerarGuiaResult);
       if(guia.mensagemErro){
         throw new MensagemErro(guia.mensagemErro);
@@ -206,7 +213,7 @@ export class VeiculosService {
 
     if (validoListaIDs === true) {
       try {
-        const res = await client.GerarGuia(veiculoConsulta);
+        const res: GerarGuiaResponseDTO = await client.GerarGuia(veiculoConsulta);
         const guia: GerarGuiaRetorno = new GerarGuiaRetorno(res.GerarGuiaResult);
         if(guia.mensagemErro){
           throw new MensagemErro(guia.mensagemErro);

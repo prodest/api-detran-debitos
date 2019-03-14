@@ -48,10 +48,10 @@ export class Debito extends DefineClasseDebitos{
   valorAtualizadoFranquia: number;
 
   @ApiModelProperty()
-  flagDpvatAnterior: number;
+  dpvatCotas: string;
 
   @ApiModelProperty()
-  dpvatCotas: string;
+  flagDpvatAnterior: number;
 
   @ApiModelProperty()
   flagDpvatExercicio: number;
@@ -106,7 +106,7 @@ export class Debito extends DefineClasseDebitos{
     this.flagDpvatExercicio = debito.DpvatExercicio;
     this.flagDpvatAnterior = debito.DpvatAnterior;
     this.codigoServico = debito.CodigoServico;
-    this.classe = super.defineClasse(debito.Classe) || debito.Classe;
+    this.classe = super.defineClasse(debito.Classe);
     this.exercicio = debito.Exercicio;
     this.parcela = debito.Parcela;
     this.ipvaCotas = debito.IpvaCotas;
