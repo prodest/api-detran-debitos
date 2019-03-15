@@ -10,7 +10,7 @@ export class VeiculosService {
 
   async getDadosVeiculos( params ): Promise<VeiculoRetorno> {
     const veiculoRetorno = new VeiculoRetorno(params);
-    if(veiculoRetorno.mensagemErro){
+    if (veiculoRetorno.mensagemErro){
       throw new MensagemErro(veiculoRetorno.mensagemErro);
     }
     return veiculoRetorno;
@@ -18,7 +18,7 @@ export class VeiculosService {
 
   async getDebitos( params ): Promise<DebitoRetorno> {
     const debitoRetorno = new DebitoRetorno(params);
-    if(debitoRetorno.mensagemErro){
+    if (debitoRetorno.mensagemErro){
       throw new MensagemErro(debitoRetorno.mensagemErro);
     }
     return debitoRetorno;
@@ -26,7 +26,7 @@ export class VeiculosService {
 
   async getDebitosPreview( params ): Promise<TipoDebito>{
     const debitosPreview = new TipoDebito(params);
-    if(debitosPreview.mensagemErro){
+    if (debitosPreview.mensagemErro){
       throw new MensagemErro(debitosPreview.mensagemErro);
     }
     return debitosPreview;
@@ -34,7 +34,7 @@ export class VeiculosService {
 
   async getTiposDebitos( params ): Promise<DebitoRetorno> {
     const debitoRetorno = new DebitoRetorno(params);
-    if(debitoRetorno.mensagemErro){
+    if (debitoRetorno.mensagemErro){
       throw new MensagemErro(debitoRetorno.mensagemErro);
     }
     return debitoRetorno;
@@ -42,7 +42,7 @@ export class VeiculosService {
 
   async gerarGRU( params ): Promise<GerarGuiaRetorno>{
     const retornoGRU = new GerarGuiaRetorno(params);
-    if(retornoGRU.mensagemErro){
+    if (retornoGRU.mensagemErro){
       throw new MensagemErro(retornoGRU.mensagemErro);
     }
     return retornoGRU;
@@ -50,7 +50,7 @@ export class VeiculosService {
 
   async gerarGRUParcial( params ): Promise<GerarGuiaRetorno>{
     const retornoGRU = new GerarGuiaRetorno(params);
-    if(retornoGRU.mensagemErro){
+    if (retornoGRU.mensagemErro){
       throw new MensagemErro(retornoGRU.mensagemErro);
     }
     return retornoGRU;

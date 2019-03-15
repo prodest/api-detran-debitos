@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Res, HttpStatus, HttpException, Post, Body } from '@nestjs/common';
 import * as Redis from 'async-redis';
 import { Response } from 'express';
-import { ApiOperation, ApiResponse, ApiImplicitParam, ApiUseTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiImplicitParam, ApiUseTags, ApiImplicitBody } from '@nestjs/swagger';
 
 import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
 import { Debito } from '../models/debito.model';
@@ -190,9 +190,10 @@ export class VeiculosController {
     description: 'tipo do debito',
     required: true,
   } )
-  @ApiImplicitParam( {
-    name: 'listaIDs',
-    description: 'Lista de IDs de debitos, separados por virgula',
+  @ApiImplicitBody( {
+    name: 'ListaIDs',
+    type: ListaIDs,
+    description: 'Array com os IDs dos debitos.',
     required: true,
   } )
   async gerarGRUParcial( @Res() res: Response, @Param() params: ControllerVeiculosParams, @Body() listaIDs: ListaIDs ) {

@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { VeiculosService } from './veiculos.service';
 import { MsgErro } from '../models/enuns/msgErro.enum';
 import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
-import { VeiculoRetorno } from '../models/veiculoRetorno.model';
 
 jest.mock( './veiculos.service' );
 
@@ -32,12 +31,10 @@ describe( 'VeiculosService', () => {
       placa: 'AB45SD2',
       renavam: '12345678910',
     };
-    const respostaDoTeste = await service.getDadosVeiculos( params );
-    console.log('>>>>>>>>>>>>>>>>>>',respostaDoTeste);
+    const respostaDoTeste: any = await service.getDadosVeiculos( params );
     expect( Object.keys(respostaDoTeste)[0] )
       .toBe( 'mensagem' );
   } );
-  
   it( 'getDadosVeiculos() com dados de veículo roubado deve impedir a consulta', async () => {
     params = {
       placa: 'ROU8470',
@@ -125,17 +122,17 @@ describe( 'VeiculosService', () => {
     };
     const respostaDoTeste = await service.gerarGRU( params );
     expect( Object.keys(respostaDoTeste)[0] )
-      //.toBe( 'mensagemErro' );
+      .toBe( 'mensagemErro' );
   } );
 
-  // it( 'gerarGRU com cota unica e as demais cotas do IPVA do mesmo exercicio', async () => {
-  //   params = {
-  //     placa: 'COT4100',
-  //     renavam: '98765432101',
-  //   };
-  //   const respostaDoTeste = await service.gerarGRU( params );
-  //   expect( Object.keys(respostaDoTeste)[0] )
-  //     //.toBe( 'mensagemErro' );
-  // } );
+  it( 'gerarGRU com cota unica e as demais cotas do IPVA do mesmo exercicio', async () => {
+    params = {
+      placa: 'COT4100',
+      renavam: '98765432101',
+    };
+    const respostaDoTeste = await service.gerarGRU( params );
+    expect( Object.keys(respostaDoTeste)[0] )
+      .toBe( 'mensagemErro' );
+  } );
 
 } );

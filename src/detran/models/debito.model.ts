@@ -51,37 +51,65 @@ export class Debito extends DefineClasseDebitos{
   @ApiModelProperty()
   dpvatCotas: string;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos DPVATANTERIOR. Valores:\
+  0 -> Não marcado (débito opcional);\
+  1 -> Marcado (não pode desmarcar, débito obrigatório);\
+  2 -> Marcado (pode desmarcar, débito opcional);\
+  3 -> Desabilitado (não exibir o débito).'})
   flagDpvatAnterior: number;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos DPVAT. Valores:\
+  0 -> Não marcado (débito opcional);\
+  1 -> Marcado (não pode desmarcar, débito obrigatório);\
+  2 -> Marcado (pode desmarcar, débito opcional);\
+  3 -> Desabilitado (não exibir o débito).'})
   flagDpvatExercicio: number;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos IPVAANTERIOR. Valores:\
+  0 -> Não marcado (débito opcional);\
+  1 -> Marcado (não pode desmarcar, débito obrigatório);\
+  2 -> Marcado (pode desmarcar, débito opcional);\
+  3 -> Desabilitado (não exibir o débito).'})
   flagIpvaAnterior: number;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos IPVA. Valores:\
+  0 -> Não marcado (débito opcional);\
+  1 -> Marcado (não pode desmarcar, débito obrigatório);\
+  2 -> Marcado (pode desmarcar, débito opcional);\
+  3 -> Desabilitado (não exibir o débito).'})
   flagIpvaExercicio: number;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag não utilizada no momento.'})
   flagIpvaParcelamento: number;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos LICENCIAMENTOANTERIOR. Valores:\
+  0 -> Não marcado (débito opcional);\
+  1 -> Marcado (não pode desmarcar, débito obrigatório);\
+  2 -> Marcado (pode desmarcar, débito opcional);\
+  3 -> Desabilitado (não exibir o débito).'})
   flagLicenciamentoAnterior: number;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos LICENCIAMENTOATUAL. Valores:\
+  0 -> Não marcado (débito opcional);\
+  1 -> Marcado (não pode desmarcar, débito obrigatório);\
+  2 -> Marcado (pode desmarcar, débito opcional);\
+  3 -> Desabilitado (não exibir o débito).'})
   flagLicenciamentoExercicio: number;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos MULTAS. Valores:\
+  0 -> Não marcado (débito opcional);\
+  1 -> Marcado (não pode desmarcar, débito obrigatório);\
+  2 -> Marcado (pode desmarcar, débito opcional);\
+  3 -> Desabilitado (não exibir o débito).'})
   flagMultas: number;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag não utilizada no momento.'})
   flagTaxaEspecial: number;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag não utilizada no momento.'})
   flagTaxaPatio: number;
 
-  @ApiModelProperty()
+  @ApiModelProperty({description: 'Flag não utilizada no momento.'})
   flagTaxaServico: number;
 
   @ApiModelProperty()
