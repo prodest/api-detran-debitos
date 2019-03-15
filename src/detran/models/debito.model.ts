@@ -1,6 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { DefineClasseDebitos } from '../common/config/defineClasseDebitos.config';
 import { ClassDeb } from './enuns/classDeb.enum';
+import { DebitoDTO } from './wsib/debito.dto';
 
 export class Debito extends DefineClasseDebitos{
   @ApiModelProperty({
@@ -86,7 +87,7 @@ export class Debito extends DefineClasseDebitos{
   @ApiModelProperty()
   ipvaCotas: string;
 
-  constructor(debito: any) {
+  constructor(debito: DebitoDTO) {
     super();
     this.descricaoServico = debito.DescricaoServico;
     this.valorAtualizadoFranquia = debito.ValorAtualizadoFranquia;

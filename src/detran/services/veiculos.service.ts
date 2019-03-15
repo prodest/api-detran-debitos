@@ -11,11 +11,11 @@ import { VeiculoConsulta } from '../models/veiculoConsulta.model';
 import { VeiculoRetorno } from '../models/veiculoRetorno.model';
 import { DetranSoapClient } from '../repository/detran-soap-client';
 import { ObterDadosVeiculoResponseDTO } from '../models/wsib/obterDadosVeiculoResponse.dto';
-import { ObterDebitosResponseDTO } from 'detran/models/wsib/obterDebitosResponse.dto';
-import { ObterTiposDebitosResponse } from 'detran/models/wsib/obterTiposDebitosResponse.dto';
-import { ObterDebitosPorTipoDebitoResponseDTO } from 'detran/models/wsib/obterDebitosPorTipoDebitoResponse.dto';
-import { GerarGuiaResponseDTO } from 'detran/models/wsib/gerarGuiaResponse.dto';
-import { GerarGuiaResponseDTO } from 'detran/models/wsib/gerarGuiaResponse.dto';
+import { ObterDebitosResponseDTO } from '../models/wsib/obterDebitosResponse.dto';
+import { ObterTiposDebitosResponse } from '../models/wsib/obterTiposDebitosResponse.dto';
+import { ObterDebitosPorTipoDebitoResponseDTO } from '../models/wsib/obterDebitosPorTipoDebitoResponse.dto';
+import { GerarGuiaResponseDTO } from '../models/wsib/gerarGuiaResponse.dto';
+
 
 
 @Injectable()

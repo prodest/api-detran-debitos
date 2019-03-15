@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { MsgErro } from './enuns/msgErro.enum';
+import { ObterTiposDebitosResultDTO } from './wsib/obterTiposDebitosResult.dto';
 
 export class TipoDebito {
   @ApiModelProperty()
@@ -26,7 +27,7 @@ export class TipoDebito {
   @ApiModelProperty()
   mensagemErro?: string;
 
-  constructor(tipoDeb: any) {
+  constructor(tipoDeb: ObterTiposDebitosResultDTO) {
     if (Object.keys(tipoDeb)[0] === 'MensagemErro') {
       this.mensagemErro = tipoDeb.MensagemErro;
     } else if (tipoDeb === null || tipoDeb === undefined) {

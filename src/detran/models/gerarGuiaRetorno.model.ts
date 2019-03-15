@@ -1,5 +1,6 @@
 import { ItemGuia } from './itemGuia.model';
 import { ApiModelProperty } from '@nestjs/swagger';
+import { GerarGuiaResultDTO } from './wsib/gerarGuiaResult.dto';
 
 export class GerarGuiaRetorno {
   @ApiModelProperty({type: [ItemGuia]})
@@ -11,7 +12,7 @@ export class GerarGuiaRetorno {
   @ApiModelProperty()
   guiaPDF: string;
 
-  constructor(gerar_guia: any) {
+  constructor(gerar_guia: GerarGuiaResultDTO) {
     if (Object.keys(gerar_guia)[0] === 'MensagemErro') {
       this.mensagemErro = gerar_guia.MensagemErro;
     } else if (gerar_guia === null || gerar_guia === undefined) {
