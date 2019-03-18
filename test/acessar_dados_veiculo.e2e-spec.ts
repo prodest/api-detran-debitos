@@ -5,7 +5,8 @@ import { INestApplication } from '@nestjs/common';
 import { DetranModule } from '../src/detran/detran.module';
 const feature = loadFeature( './test/features/acessar_dados_veiculo.feature' );
 jest.mock( '../src/detran/detran.module' );
-jest.mock( '../src/detran/services/veiculos.service' );
+jest.mock( '../src/repository/detran-soap-client.ts' );
+// jest.mock( '../src/detran/services/veiculos.service' );
 
 let resposta: any;
 let placa: string;
@@ -44,7 +45,8 @@ defineFeature( feature, test => {
       'o sistema retorna os dados do veiculo',
       async () => {
         dataVehicle = resposta.body;
-        expect( Object.keys( dataVehicle ) ).toContain( 'placa' );
+        console.log('CONTROL >>>>>>>>>> ', dataVehicle);
+        expect( Object.keys( dataVehicle )[0] ).toContain( 'placa' );
       },
     );
   } );

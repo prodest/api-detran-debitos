@@ -1,7 +1,7 @@
-import { Veiculo } from "./veiculo.dto";
+import { VeiculoDTO } from './veiculo.dto';
 
-export class VeiculoInfo {
-    Veiculo: Veiculo;
+export class VeiculoInfoDTO {
+    Veiculo: VeiculoDTO;
     Nome: string;
     MarcaModelo: string;
     AnoFabricacao: string;

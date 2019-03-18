@@ -17,7 +17,6 @@ import { ObterDebitosPorTipoDebitoResponseDTO } from '../models/wsib/obterDebito
 import { GerarGuiaResponseDTO } from '../models/wsib/gerarGuiaResponse.dto';
 
 
-
 @Injectable()
 export class VeiculosService {
   private detranSoapClient: DetranSoapClient;
@@ -37,14 +36,15 @@ export class VeiculosService {
     try {
       const res: ObterDadosVeiculoResponseDTO = await client.ObterDadosVeiculo(veiculoConsulta);
       const veiculoRetorno = new VeiculoRetorno(res.ObterDadosVeiculoResult);
-      if(veiculoRetorno.mensagemErro){
+      console.log('SERVICE ', res);
+      if (veiculoRetorno.mensagemErro){
         throw new MensagemErro(veiculoRetorno.mensagemErro);
       }
       return veiculoRetorno;
     } catch (error) {
       let mensagem: string = MsgErro.SERV_GET_DADOS_VEIC;
       if (Object.keys(error)[0] === 'mensagem'){
-        mensagem = mensagem+' '+error.mensagem;
+        mensagem = mensagem + ' ' + error.mensagem;
       }
       throw new MensagemErro(mensagem);
     }
@@ -60,16 +60,15 @@ export class VeiculosService {
 
     try {
       const res: ObterDebitosResponseDTO = await client.ObterDebitos(veiculoConsulta);
-      console.log(res)
       const debitos = new DebitoRetorno(res.ObterDebitosResult);
-      if(debitos.mensagemErro){
+      if (debitos.mensagemErro){
         throw new MensagemErro(debitos.mensagemErro);
       }
       return debitos;
     } catch (error) {
       let mensagem: string = MsgErro.SERV_GET_DEB;
       if (Object.keys(error)[0] === 'mensagem'){
-        mensagem = mensagem+' '+error.mensagem;
+        mensagem = mensagem + ' ' + error.mensagem;
       }
       throw new MensagemErro(mensagem);
     }
@@ -86,14 +85,14 @@ export class VeiculosService {
     try {
       const res: ObterTiposDebitosResponse = await client.ObterTiposDebitos(veiculoConsulta);
       const tipoDebito = new TipoDebito(res.ObterTiposDebitosResult);
-      if(tipoDebito.mensagemErro){
+      if (tipoDebito.mensagemErro){
         throw new MensagemErro(tipoDebito.mensagemErro);
       }
       return tipoDebito;
     } catch (error) {
       let mensagem: string = MsgErro.SERV_GET_DEB_PREV;
       if (Object.keys(error)[0] === 'mensagem'){
-        mensagem = mensagem+' '+error.mensagem;
+        mensagem = mensagem + ' ' + error.mensagem;
       }
       throw new MensagemErro(mensagem);
     }
@@ -110,14 +109,14 @@ export class VeiculosService {
     try {
       const res: ObterDebitosPorTipoDebitoResponseDTO = await client.ObterDebitosPorTipoDebito(veiculoConsulta);
       const debitos = new DebitoRetorno(res.ObterDebitosPorTipoDebitoResult);
-      if(debitos.mensagemErro){
+      if (debitos.mensagemErro){
         throw new MensagemErro(debitos.mensagemErro);
       }
       return debitos;
     } catch (error) {
       let mensagem: string = MsgErro.SERV_GET_DEB;
       if (Object.keys(error)[0] === 'mensagem'){
-        mensagem = mensagem+' '+error.mensagem;
+        mensagem = mensagem + ' ' + error.mensagem;
       }
       throw new MensagemErro(mensagem);
     }
@@ -151,14 +150,14 @@ export class VeiculosService {
     try {
       const res: GerarGuiaResponseDTO = await client.GerarGuia(veiculoConsulta);
       const guia: GerarGuiaRetorno = new GerarGuiaRetorno(res.GerarGuiaResult);
-      if(guia.mensagemErro){
+      if (guia.mensagemErro){
         throw new MensagemErro(guia.mensagemErro);
       }
       return guia;
     } catch (error) {
       let mensagem: string = MsgErro.SERV_GERAR_GUIA;
       if (Object.keys(error)[0] === 'mensagem'){
-        mensagem = mensagem+' '+error.mensagem;
+        mensagem = mensagem + ' ' + error.mensagem;
       }
       throw new MensagemErro(mensagem);
     }
@@ -215,14 +214,14 @@ export class VeiculosService {
       try {
         const res: GerarGuiaResponseDTO = await client.GerarGuia(veiculoConsulta);
         const guia: GerarGuiaRetorno = new GerarGuiaRetorno(res.GerarGuiaResult);
-        if(guia.mensagemErro){
+        if (guia.mensagemErro){
           throw new MensagemErro(guia.mensagemErro);
         }
         return guia;
       } catch (error) {
         let mensagem: string = MsgErro.SERV_GERAR_GUIA;
         if (Object.keys(error)[0] === 'mensagem'){
-          mensagem = mensagem+' '+error.mensagem;
+          mensagem = mensagem + ' ' + error.mensagem;
         }
         throw new MensagemErro(mensagem);
       }

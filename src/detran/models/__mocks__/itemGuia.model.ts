@@ -71,8 +71,7 @@ export class ItemGuia {
   valorAuto: number;
 
   constructor(i_guia: any) {
-    (this.linhaDigitavel =
-      '85820000000-7  19640219201-0  81130002018-6  80100847395-0'),
+    (this.linhaDigitavel = '85820000000-7  19640219201-0  81130002018-6  80100847395-0'),
       (this.codigoBarra = '85820000000196402192018113000201880100847395'),
       (this.valorGuia = 19.64),
       (this.postagem = true),

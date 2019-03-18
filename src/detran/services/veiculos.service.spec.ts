@@ -2,8 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { VeiculosService } from './veiculos.service';
 import { MsgErro } from '../models/enuns/msgErro.enum';
 import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
+import { MensagemErro } from '../common/mensagemErro';
+import { DetranSoapClient } from '../repository/detran-soap-client';
+import { DetranModule } from '../detran.module';
 
-jest.mock( './veiculos.service' );
+jest.mock( '../detran.module' );
+jest.mock( '../repository/detran-soap-client.ts' );
 
 let params: ControllerVeiculosParams;
 
@@ -11,16 +15,17 @@ describe( 'VeiculosService', () => {
   let service: VeiculosService;
   beforeAll( async () => {
     const module: TestingModule = await Test.createTestingModule( {
-      providers: [ VeiculosService ],
+      imports: [ DetranModule ],
     } ).compile();
     service = module.get<VeiculosService>( VeiculosService );
   } );
 
   it( 'getDadosVeiculos() com dados válidos deve retornar dados do veículo', async () => {
-    params = {
+    const params: ControllerVeiculosParams = {
       placa: 'VAL1705',
       renavam: '98765432101',
     };
+
     const respostaDoTeste = await service.getDadosVeiculos( params );
     expect( Object.keys(respostaDoTeste)[0])
       .toBe( 'placa' );
@@ -33,7 +38,7 @@ describe( 'VeiculosService', () => {
     };
     const respostaDoTeste: any = await service.getDadosVeiculos( params );
     expect( Object.keys(respostaDoTeste)[0] )
-      .toBe( 'mensagem' );
+      .toBe( MensagemErro );
   } );
   it( 'getDadosVeiculos() com dados de veículo roubado deve impedir a consulta', async () => {
     params = {
