@@ -1,3 +1,4 @@
+
 export class VeiculoDTO {
     Placa: string;
     CPF: string;

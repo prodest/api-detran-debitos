@@ -1,16 +1,15 @@
 import { DebitoArray } from './debitoArray.dto';
-import { MsgErro } from '../enuns/msgErro.enum';
+import { VeiculoConsulta } from '../../../models/veiculoConsulta.model';
 
 export class ObterDebitosResultDTO {
     Debito: DebitoArray;
     MensagemErro: string;
 
-    constructor(debits: any){
-
-        if (debits.placa !== 'VAL1705') {
-        this.MensagemErro = MsgErro.DEB_RET_VAZIO;
+    constructor(params: VeiculoConsulta){
+        if (params.veiculoConsulta.Placa !== 'VAL1705') {
+            this.Debito = null;
         } else {
-        this.Debito = new DebitoArray(debits);
+            this.Debito = new DebitoArray(params);
         }
     }
 }

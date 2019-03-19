@@ -3,7 +3,6 @@ import { VeiculosService } from './veiculos.service';
 import { MsgErro } from '../models/enuns/msgErro.enum';
 import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
 import { MensagemErro } from '../common/mensagemErro';
-import { DetranSoapClient } from '../repository/detran-soap-client';
 import { DetranModule } from '../detran.module';
 
 jest.mock( '../detran.module' );

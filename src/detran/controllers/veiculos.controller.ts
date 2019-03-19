@@ -16,16 +16,16 @@ import { ListaIDs } from '../models/listaIDs.dto';
 @Controller( 'veiculos' )
 @ApiUseTags('veiculos-debitos')
 export class VeiculosController {
-  redisClient = Redis.createClient({
-    port: process.env.REDIS_PORT || 6379,
-    host: process.env.REDIS_HOST || '127.0.0.1',
-  });
+  // redisClient = Redis.createClient({
+  //   port: process.env.REDIS_PORT || 6379,
+  //   host: process.env.REDIS_HOST || '127.0.0.1',
+  // });
 
   constructor( private readonly veiculosService: VeiculosService ) {
-    this.redisClient.on('error', (err: Error) => {
-// tslint:disable-next-line: no-console
-      console.log('Error ' + err);
-    });
+//     this.redisClient.on('error', (err: Error) => {
+// // tslint:disable-next-line: no-console
+//       console.log('Error ' + err);
+//     });
   }
 
   @Get( ':placa/:renavam' )
@@ -160,8 +160,8 @@ export class VeiculosController {
 
     try {
       const resposta: GerarGuiaRetorno = await this.veiculosService.gerarGRU( params );
-      this.redisClient.set(resposta.itensGuia[0].codigoBarra, resposta.guiaPDF);
-      this.redisClient.expire(resposta.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME, 10));
+      // this.redisClient.set(resposta.itensGuia[0].codigoBarra, resposta.guiaPDF);
+      // this.redisClient.expire(resposta.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME, 10));
       res.status( HttpStatus.OK ).send( resposta );
     } catch ( error ) {
       throw new HttpException( error.mensagem, HttpStatus.FORBIDDEN );
@@ -200,8 +200,8 @@ export class VeiculosController {
 
     try {
       const resposta: GerarGuiaRetorno = await this.veiculosService.gerarGRUParcial( params, listaIDs.lista );
-      this.redisClient.set(resposta.itensGuia[0].codigoBarra, resposta.guiaPDF);
-      this.redisClient.expire(resposta.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME, 10));
+      // this.redisClient.set(resposta.itensGuia[0].codigoBarra, resposta.guiaPDF);
+      // this.redisClient.expire(resposta.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME, 10));
       res.status( HttpStatus.OK ).send( resposta );
     } catch (error) {
       throw new HttpException(error.mensagem, HttpStatus.FORBIDDEN);

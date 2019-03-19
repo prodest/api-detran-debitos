@@ -5,7 +5,7 @@ import { INestApplication } from '@nestjs/common';
 import { DetranModule } from '../src/detran/detran.module';
 const feature = loadFeature( './test/features/gerar_GRU.feature' );
 jest.mock( '../src/detran/detran.module' );
-jest.mock( '../src/detran/services/veiculos.service' );
+jest.mock( '../src/detran/repository/detran-soap-client' );
 
 let resposta: any;
 let placa: string;

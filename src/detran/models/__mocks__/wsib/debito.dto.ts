@@ -1,3 +1,4 @@
+import { VeiculoConsulta } from '../../../models/veiculoConsulta.model';
 
 export class DebitoDTO {
     DescricaoServico: string;
@@ -23,8 +24,8 @@ export class DebitoDTO {
     Parcela: number;
     IpvaCotas: string;
 
-    constructor(debito: any) {
-        if (debito.tipo_debito === 'IPVA') {
+    constructor(debito: VeiculoConsulta) {
+        if (debito.tipoSelecionado === 'IPVA') {
           this.DescricaoServico = 'IPVA 4ª Cota 2018';
           this.ValorAtualizadoFranquia = 77.58;
           this.DataVencimento = '2017-07-12T03:00:00.000Z';

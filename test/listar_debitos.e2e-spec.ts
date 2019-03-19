@@ -6,7 +6,7 @@ import { DetranModule } from '../src/detran/detran.module';
 import { MsgErro } from '../src/detran/models/enuns/msgErro.enum';
 const feature = loadFeature( './test/features/listar_debitos.feature' );
 jest.mock( '../src/detran/detran.module' );
-jest.mock( '../src/detran/services/veiculos.service' );
+jest.mock( '../src/detran/repository/detran-soap-client' );
 
 let resposta: any;
 let placa: string;
@@ -46,7 +46,7 @@ defineFeature( feature, test => {
       'o sistema retorna uma lista com a previa de todos os tipos de debitos',
       async () => {
       dataVehicle = resposta.body;
-      expect( Object.keys( dataVehicle )[0] ).toContain( 'temLicenciamentoAnual' );
+      expect( Object.keys( dataVehicle )[0] ).toContain( 'temLicenciamentoAtual' );
       },
     );
   } );

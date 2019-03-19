@@ -36,7 +36,6 @@ export class VeiculosService {
     try {
       const res: ObterDadosVeiculoResponseDTO = await client.ObterDadosVeiculo(veiculoConsulta);
       const veiculoRetorno = new VeiculoRetorno(res.ObterDadosVeiculoResult);
-      console.log('SERVICE ', res);
       if (veiculoRetorno.mensagemErro){
         throw new MensagemErro(veiculoRetorno.mensagemErro);
       }
