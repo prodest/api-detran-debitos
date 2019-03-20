@@ -6,10 +6,11 @@ export class ObterDebitosResultDTO {
     MensagemErro: string;
 
     constructor(params: VeiculoConsulta){
-        if (params.veiculoConsulta.Placa !== 'VAL1705') {
-            this.Debito = null;
-        } else {
+
+        if (params.veiculoConsulta.Placa === 'VAL1705' || params.veiculoConsulta.Placa === 'COT4100') {
             this.Debito = new DebitoArray(params);
+        } else {
+            this.Debito = null;
         }
     }
 }

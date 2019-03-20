@@ -6,7 +6,11 @@ export class GerarGuiaResultDTO {
     GuiaPDF: string;
 
     constructor(params: any){
-        this.Guia = new GuiaDTO(params);
         this.GuiaPDF =  'PDF';
+        if (params.veiculoConsulta.Placa === 'COT4100') {
+            this.MensagemErro = 'Não é possível escolher cota única e as demais cotas de IPVA para o mesmo exercício. Verifique conjunto de débitos.';
+        }else{
+            this.Guia = new GuiaDTO(params);
+        }
     }
 }

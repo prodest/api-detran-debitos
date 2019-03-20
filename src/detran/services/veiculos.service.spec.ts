@@ -2,13 +2,18 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { VeiculosService } from './veiculos.service';
 import { MsgErro } from '../models/enuns/msgErro.enum';
 import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
-import { MensagemErro } from '../common/mensagemErro';
 import { DetranModule } from '../detran.module';
+import { VeiculoRetorno } from '../models/veiculoRetorno.model';
+import { DebitoRetorno } from '../models/debitoRetorno.model';
+import { TipoDebito } from '../models/tipoDebito.model';
+import { GerarGuiaRetorno } from '../models/gerarGuiaRetorno.model';
+import { ListaIDs } from '../models/listaIDs.dto';
 
 jest.mock( '../detran.module' );
 jest.mock( '../repository/detran-soap-client.ts' );
 
 let params: ControllerVeiculosParams;
+let listaIDs: ListaIDs;
 
 describe( 'VeiculosService', () => {
   let service: VeiculosService;
@@ -20,12 +25,12 @@ describe( 'VeiculosService', () => {
   } );
 
   it( 'getDadosVeiculos() com dados válidos deve retornar dados do veículo', async () => {
-    const params: ControllerVeiculosParams = {
+    params = {
       placa: 'VAL1705',
       renavam: '98765432101',
     };
 
-    const respostaDoTeste = await service.getDadosVeiculos( params );
+    const respostaDoTeste: VeiculoRetorno = await service.getDadosVeiculos( params );
     expect( Object.keys(respostaDoTeste)[0])
       .toBe( 'placa' );
   } );
@@ -35,18 +40,24 @@ describe( 'VeiculosService', () => {
       placa: 'AB45SD2',
       renavam: '12345678910',
     };
-    const respostaDoTeste: any = await service.getDadosVeiculos( params );
-    expect( Object.keys(respostaDoTeste)[0] )
-      .toBe( MensagemErro );
+    try {
+      const respostaDoTeste: VeiculoRetorno = await service.getDadosVeiculos( params );
+    } catch (error) {
+      expect( error.mensagem )
+      .toBe( MsgErro.SERV_GET_DADOS_VEIC + ' Veículo não encontrado.' );
+    }
   } );
   it( 'getDadosVeiculos() com dados de veículo roubado deve impedir a consulta', async () => {
     params = {
       placa: 'ROU8470',
       renavam: '12345678910',
     };
-    const respostaDoTeste = await service.getDadosVeiculos( params );
-    expect( respostaDoTeste.mensagemErro )
-      .toBe( 'Consulta não permitida para veículo com registro de furto/roubo ativo' );
+    try{
+      const respostaDoTeste: VeiculoRetorno = await service.getDadosVeiculos( params );
+    }catch (error) {
+      expect( error.mensagem )
+      .toBe( MsgErro.SERV_GET_DADOS_VEIC + ' Consulta não permitida para veículo com registro de furto/roubo ativo' );
+    }
   } );
 
   /* getDebitos() */
@@ -55,20 +66,20 @@ describe( 'VeiculosService', () => {
       placa: 'VAL1705',
       renavam: '98765432101',
     };
-    const respostaDoTeste = await service.getDebitos( params );
+    const respostaDoTeste: DebitoRetorno = await service.getDebitos( params );
 
     expect( respostaDoTeste.debitos[0].descricaoServico )
       .toBe( 'Licenciamento Anual 2018' );
   } );
 
-  it( 'getDebitos() com dados inválidos ou veiculo não pussui debitos deve retornar uma mensagem', async () => {
+  it( 'getDebitos() com dados inválidos ou veiculo não pussui debitos deve retornar um array vazio', async () => {
     params = {
       placa: 'XXX0000',
       renavam: '12345678910',
     };
-    const respostaDoTeste = await service.getDebitos( params );
-    expect( respostaDoTeste.debitos[0] )
-      .toBe( MsgErro.DEB_RET_VAZIO );
+    const respostaDoTeste: DebitoRetorno = await service.getDebitos( params );
+    expect( respostaDoTeste.debitos )
+      .toEqual( expect.arrayContaining( [] ) );
   } );
 
   /* getDebitosPreview() */
@@ -77,9 +88,9 @@ describe( 'VeiculosService', () => {
       placa: 'VAL1705',
       renavam: '98765432101',
     };
-    const respostaDoTeste = await service.getDebitosPreview( params );
+    const respostaDoTeste: TipoDebito = await service.getDebitosPreview( params );
     expect( Object.keys(respostaDoTeste)[0] )
-      .toBe( 'temLicenciamentoAnual' );
+      .toBe( 'temLicenciamentoAtual' );
   } );
 
   /* getTiposDebitos() */
@@ -89,7 +100,7 @@ describe( 'VeiculosService', () => {
       renavam: '98765432101',
       tipo_debito: 'IPVA',
     };
-    const respostaDoTeste = await service.getTiposDebitos( params );
+    const respostaDoTeste: DebitoRetorno = await service.getTiposDebitos( params );
     expect( respostaDoTeste.debitos[0].descricaoServico )
       .toBe( 'IPVA 4ª Cota 2018' );
   } );
@@ -97,10 +108,10 @@ describe( 'VeiculosService', () => {
   /* gerarGRU() */
   it( 'gerarGRU com dados validos deve retornar uma guia', async () => {
     params = {
-      placa: 'ABC1234',
+      placa: 'VAL1705',
       renavam: '98765432101',
     };
-    const respostaDoTeste = await service.gerarGRU( params );
+    const respostaDoTeste: GerarGuiaRetorno = await service.gerarGRU( params );
     expect( Object.keys(respostaDoTeste)[0] )
       .toBe( 'itensGuia' );
   } );
@@ -110,9 +121,11 @@ describe( 'VeiculosService', () => {
       placa: 'ABC1234',
       renavam: '98765432101',
       tipo_debito: 'dpvat',
-      // listaIDs: '78994446,84677037',
     };
-    const respostaDoTeste = await service.gerarGRU( params );
+    listaIDs = {
+      lista: [78994446, 84677037],
+    }
+    const respostaDoTeste = await service.gerarGRUParcial( params, listaIDs.lista );
     expect( Object.keys(respostaDoTeste)[0] )
       .toBe( 'itensGuia' );
   } );
@@ -122,11 +135,16 @@ describe( 'VeiculosService', () => {
       placa: 'ABC1234',
       renavam: '98765432101',
       tipo_debito: 'dpvat',
-      // listaIDs: '84677037',
     };
-    const respostaDoTeste = await service.gerarGRU( params );
-    expect( Object.keys(respostaDoTeste)[0] )
-      .toBe( 'mensagemErro' );
+    listaIDs = {
+      lista: [84677037],
+    }
+    try {
+      const respostaDoTeste = await service.gerarGRUParcial( params, listaIDs.lista );
+    } catch (error) {
+      expect( error.mensagem )
+      .toBe( '' );
+    }
   } );
 
   it( 'gerarGRU com cota unica e as demais cotas do IPVA do mesmo exercicio', async () => {
@@ -134,9 +152,13 @@ describe( 'VeiculosService', () => {
       placa: 'COT4100',
       renavam: '98765432101',
     };
-    const respostaDoTeste = await service.gerarGRU( params );
-    expect( Object.keys(respostaDoTeste)[0] )
-      .toBe( 'mensagemErro' );
+    try {
+      const respostaDoTeste = await service.gerarGRU( params );
+    } catch (error) {
+      expect( error.mensagem )
+      .toBe( MsgErro.SERV_GERAR_GUIA +
+        ' Não é possível escolher cota única e as demais cotas de IPVA para o mesmo exercício. Verifique conjunto de débitos.',
+        );
+    }
   } );
-
 } );

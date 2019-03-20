@@ -16,7 +16,6 @@ import { ObterTiposDebitosResponse } from '../models/wsib/obterTiposDebitosRespo
 import { ObterDebitosPorTipoDebitoResponseDTO } from '../models/wsib/obterDebitosPorTipoDebitoResponse.dto';
 import { GerarGuiaResponseDTO } from '../models/wsib/gerarGuiaResponse.dto';
 
-
 @Injectable()
 export class VeiculosService {
   private detranSoapClient: DetranSoapClient;
@@ -101,6 +100,8 @@ export class VeiculosService {
     const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
     const client = await this.detranSoapClient._client;
 
+    params.tipo_debito = params.tipo_debito.toUpperCase();
+
     if (Object.keys(client)[0] === 'mensagemErro') {
       throw new MensagemErro(client.mensagemErro);
     }
@@ -124,7 +125,7 @@ export class VeiculosService {
   async gerarGRU(params: ControllerVeiculosParams): Promise<GerarGuiaRetorno> {
     const veiculoConsulta = new VeiculoConsulta(params);
     const client = await this.detranSoapClient._client;
-    const array_ids: Array<string> = new Array();
+    const array_ids: Array<number> = new Array();
 
     if (Object.keys(client)[0] === 'mensagemErro') {
       throw new MensagemErro(client.mensagemErro);
@@ -132,8 +133,8 @@ export class VeiculosService {
 
     try {
       let deb: DebitoRetorno = await this.getDebitos(params);
-      if (deb.debitos[0] === MsgErro.DEB_RET_VAZIO) {
-        throw new MensagemErro(deb.debitos[0]);
+      if (deb.debitos === []) {
+        throw new MensagemErro(MsgErro.DEB_RET_VAZIO);
       } else {
         deb = await this.verificaIpvaCotaUnica(params, deb);
         for (const debito of deb.debitos) {
@@ -141,7 +142,11 @@ export class VeiculosService {
         }
       }
     } catch (error) {
+      if (error.mensagem === MsgErro.DEB_RET_VAZIO){
+        throw new MensagemErro(MsgErro.DEB_RET_VAZIO);
+      }else{
         throw new MensagemErro(MsgErro.SERV_GERAR_GUIA_DEB);
+      }
     }
 
     veiculoConsulta.listaDebitos = array_ids.toString();
@@ -353,7 +358,7 @@ export class VeiculosService {
     }
   }
 
-  async verificaIpvaCotaUnica(params: any, debitos: DebitoRetorno): Promise<DebitoRetorno> {
+  async verificaIpvaCotaUnica(params: ControllerVeiculosParams, debitos: DebitoRetorno): Promise<DebitoRetorno> {
     let ipvaCotaUnica: boolean = false;
     let cotaUniExerc: number = -1;
     const regExIpvaCotas = /^\d{4}0$/g;
@@ -371,6 +376,7 @@ export class VeiculosService {
     }
 
     if (ipvaCotaUnica) {
+
       for (const ipvadeb of ipvaDebitos.debitos) {
         if (ipvadeb.exercicio === cotaUniExerc && ipvadeb.parcela !== 0) {
           const result = debitos.debitos.findIndex(

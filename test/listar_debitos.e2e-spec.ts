@@ -4,7 +4,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { DetranModule } from '../src/detran/detran.module';
 import { MsgErro } from '../src/detran/models/enuns/msgErro.enum';
+
 const feature = loadFeature( './test/features/listar_debitos.feature' );
+
 jest.mock( '../src/detran/detran.module' );
 jest.mock( '../src/detran/repository/detran-soap-client' );
 
@@ -108,7 +110,7 @@ defineFeature( feature, test => {
     } );
     then( 'o sistema retorna uma lista com nenhum debito', async () => {
       dataVehicle = resposta.body;
-      expect( dataVehicle[0] ).toContain( MsgErro.DEB_RET_VAZIO );
+      expect( dataVehicle ).toEqual( expect.arrayContaining( [] ) );
     } );
   } );
 

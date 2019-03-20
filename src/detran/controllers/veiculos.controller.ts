@@ -199,6 +199,7 @@ export class VeiculosController {
   async gerarGRUParcial( @Res() res: Response, @Param() params: ControllerVeiculosParams, @Body() listaIDs: ListaIDs ) {
 
     try {
+      // console.log('LISTAIDS ', listaIDs);
       const resposta: GerarGuiaRetorno = await this.veiculosService.gerarGRUParcial( params, listaIDs.lista );
       // this.redisClient.set(resposta.itensGuia[0].codigoBarra, resposta.guiaPDF);
       // this.redisClient.expire(resposta.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME, 10));
@@ -208,31 +209,31 @@ export class VeiculosController {
     }
   }
 
-  @Get( 'debitos/getGuia/:codigoBarra' )
-  @ApiOperation( {
-    description: 'Retornar um pdf da guia para pagamento.',
-    title: 'Guia PDF',
-  } )
-  @ApiResponse( { status: 200, description: 'Guia encontrada, retorna uma guia em pdf ', type: DebitoRetorno } )
-  @ApiResponse( { status: 403, description: 'Retorna uma MensagemErro' } )
-  @ApiImplicitParam( {
-    name: 'codigoBarra',
-    description: 'Código de barras da guia gerada',
-    required: true,
-  } )
-  async getGuia( @Res() res: Response, @Param() params: {codigoBarra: string} ) {
+  // @Get( 'debitos/getGuia/:codigoBarra' )
+  // @ApiOperation( {
+  //   description: 'Retornar um pdf da guia para pagamento.',
+  //   title: 'Guia PDF',
+  // } )
+  // @ApiResponse( { status: 200, description: 'Guia encontrada, retorna uma guia em pdf ', type: DebitoRetorno } )
+  // @ApiResponse( { status: 403, description: 'Retorna uma MensagemErro' } )
+  // @ApiImplicitParam( {
+  //   name: 'codigoBarra',
+  //   description: 'Código de barras da guia gerada',
+  //   required: true,
+  // } )
+  // async getGuia( @Res() res: Response, @Param() params: {codigoBarra: string} ) {
 
-    try {
-      const pdf64: string = await this.redisClient.get(params.codigoBarra);
-      const pdf: Buffer = new Buffer(pdf64, 'base64');
-      const dataAtual: Date = new Date();
+  //   try {
+  //     const pdf64: string = await this.redisClient.get(params.codigoBarra);
+  //     const pdf: Buffer = new Buffer(pdf64, 'base64');
+  //     const dataAtual: Date = new Date();
 
-      res.header('Content-Type', 'application/pdf')
-         .header('Content-Disposition', `inline; filename=dua_detran_${dataAtual.getTime()}.pdf`)
-         .status( HttpStatus.OK ).send(pdf);
-    } catch (error) {
-      throw new HttpException(MsgErro.CONT_GET_GUIA, HttpStatus.FORBIDDEN);
-    }
-  }
+  //     res.header('Content-Type', 'application/pdf')
+  //        .header('Content-Disposition', `inline; filename=dua_detran_${dataAtual.getTime()}.pdf`)
+  //        .status( HttpStatus.OK ).send(pdf);
+  //   } catch (error) {
+  //     throw new HttpException(MsgErro.CONT_GET_GUIA, HttpStatus.FORBIDDEN);
+  //   }
+  // }
 
 }

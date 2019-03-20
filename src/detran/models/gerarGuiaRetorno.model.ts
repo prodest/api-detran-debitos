@@ -13,7 +13,7 @@ export class GerarGuiaRetorno {
   guiaPDF: string;
 
   constructor(gerar_guia: GerarGuiaResultDTO) {
-    if (Object.keys(gerar_guia)[0] === 'MensagemErro') {
+    if (gerar_guia.MensagemErro) {
       this.mensagemErro = gerar_guia.MensagemErro;
     } else if (gerar_guia === null || gerar_guia === undefined) {
       this.mensagemErro = 'Erro ao gerar guia.';

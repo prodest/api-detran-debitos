@@ -5,24 +5,24 @@ import { ObterDebitosResultDTO } from './wsib/obterDebitosResult.dto';
 
 export class DebitoRetorno {
   @ApiModelProperty({type: [Debito]})
-  debitos: Array<any>;
+  debitos: Array<Debito>;
 
   @ApiModelProperty()
   mensagemErro?: string;
 
   constructor(debits: ObterDebitosResultDTO) {
-    this.debitos = new Array();
 
-    if (Object.keys(debits)[0] === 'MensagemErro') {
+    if (debits.MensagemErro) {
       this.mensagemErro = debits.MensagemErro;
-    } else if (debits.Debito === null) {
-      this.debitos.push(MsgErro.DEB_RET_VAZIO);
     } else if (debits === null || debits === undefined) {
       this.mensagemErro = MsgErro.DEB_RET_ERR;
-    } else {
+    } else if (debits.Debito !== null){
+      this.debitos = new Array();
       for (const d of debits.Debito.Debito) {
         this.debitos.push(new Debito(d));
       }
+    } else {
+      this.debitos = new Array();
     }
   }
 }
