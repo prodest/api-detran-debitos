@@ -1,4 +1,4 @@
-import { GerarGuiaResultDTO } from "./gerarGuiaResult.dto";
+import { GerarGuiaResultDTO } from './gerarGuiaResult.dto';
 
 export class GerarGuiaResponseDTO {
     GerarGuiaResult: GerarGuiaResultDTO;

@@ -9,7 +9,6 @@ import { MsgErro } from '../src/detran/models/enuns/msgErro.enum';
 
 const feature = loadFeature( './test/features/gerar_GRU.feature' );
 
-jest.mock( '../src/detran/detran.module' );
 jest.mock( '../src/detran/repository/detran-soap-client' );
 
 let resposta: any;

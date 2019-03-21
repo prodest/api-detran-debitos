@@ -1,4 +1,4 @@
-import { ObterDadosVeiculoResultDTO } from "./obterDadosVeiculoResult.dto";
+import { ObterDadosVeiculoResultDTO } from './obterDadosVeiculoResult.dto';
 
 export class ObterDadosVeiculoResponseDTO {
     ObterDadosVeiculoResult: ObterDadosVeiculoResultDTO;

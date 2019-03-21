@@ -10,11 +10,11 @@ import { TipoDebito } from '../models/tipoDebito.model';
 import { VeiculoConsulta } from '../models/veiculoConsulta.model';
 import { VeiculoRetorno } from '../models/veiculoRetorno.model';
 import { DetranSoapClient } from '../repository/detran-soap-client';
-import { ObterDadosVeiculoResponseDTO } from '../models/wsib/obterDadosVeiculoResponse.dto';
-import { ObterDebitosResponseDTO } from '../models/wsib/obterDebitosResponse.dto';
-import { ObterTiposDebitosResponse } from '../models/wsib/obterTiposDebitosResponse.dto';
-import { ObterDebitosPorTipoDebitoResponseDTO } from '../models/wsib/obterDebitosPorTipoDebitoResponse.dto';
-import { GerarGuiaResponseDTO } from '../models/wsib/gerarGuiaResponse.dto';
+import { ObterDadosVeiculoResponseDTO } from '../models/wsib_models/obterDadosVeiculoResponse.dto';
+import { ObterDebitosResponseDTO } from '../models/wsib_models/obterDebitosResponse.dto';
+import { ObterTiposDebitosResponse } from '../models/wsib_models/obterTiposDebitosResponse.dto';
+import { ObterDebitosPorTipoDebitoResponseDTO } from '../models/wsib_models/obterDebitosPorTipoDebitoResponse.dto';
+import { GerarGuiaResponseDTO } from '../models/wsib_models/gerarGuiaResponse.dto';
 
 @Injectable()
 export class VeiculosService {

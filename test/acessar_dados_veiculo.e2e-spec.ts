@@ -7,7 +7,6 @@ import { MsgErro } from '../src/detran/models/enuns/msgErro.enum';
 
 const feature = loadFeature( './test/features/acessar_dados_veiculo.feature' );
 
-jest.mock( '../src/detran/detran.module' );
 jest.mock( '../src/detran/repository/detran-soap-client' );
 
 let resposta: any;

@@ -1,4 +1,4 @@
-import { ObterDebitosResultDTO } from "./obterDebitosResult.dto";
+import { ObterDebitosResultDTO } from './obterDebitosResult.dto';
 
 export class ObterDebitosResponseDTO {
     ObterDebitosResult: ObterDebitosResultDTO;

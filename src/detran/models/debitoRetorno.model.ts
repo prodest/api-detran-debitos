@@ -1,7 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Debito } from './debito.model';
 import { MsgErro } from './enuns/msgErro.enum';
-import { ObterDebitosResultDTO } from './wsib/obterDebitosResult.dto';
+import { ObterDebitosResultDTO } from './wsib_models/obterDebitosResult.dto';
 
 export class DebitoRetorno {
   @ApiModelProperty({type: [Debito]})

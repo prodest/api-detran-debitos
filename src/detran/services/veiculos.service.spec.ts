@@ -9,7 +9,6 @@ import { TipoDebito } from '../models/tipoDebito.model';
 import { GerarGuiaRetorno } from '../models/gerarGuiaRetorno.model';
 import { ListaIDs } from '../models/listaIDs.dto';
 
-jest.mock( '../detran.module' );
 jest.mock( '../repository/detran-soap-client.ts' );
 
 let params: ControllerVeiculosParams;
@@ -124,7 +123,8 @@ describe( 'VeiculosService', () => {
     };
     listaIDs = {
       lista: [78994446, 84677037],
-    }
+    };
+
     const respostaDoTeste = await service.gerarGRUParcial( params, listaIDs.lista );
     expect( Object.keys(respostaDoTeste)[0] )
       .toBe( 'itensGuia' );
@@ -138,7 +138,8 @@ describe( 'VeiculosService', () => {
     };
     listaIDs = {
       lista: [84677037],
-    }
+    };
+
     try {
       const respostaDoTeste = await service.gerarGRUParcial( params, listaIDs.lista );
     } catch (error) {

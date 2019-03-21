@@ -1,7 +1,7 @@
-import { GuiaDTO } from "./guia.dto";
+import { GuiaDTO } from './guia.dto';
 
 export class GerarGuiaResultDTO {
-    Guia: GuiaDTO
+    Guia: GuiaDTO;
     MensagemErro: string;
     GuiaPDF: BinaryType;
 }

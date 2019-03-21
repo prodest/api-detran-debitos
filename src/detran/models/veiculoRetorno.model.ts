@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { ObterDadosVeiculoResultDTO } from './wsib/obterDadosVeiculoResult.dto';
+import { ObterDadosVeiculoResultDTO } from './wsib_models/obterDadosVeiculoResult.dto';
 
 export class VeiculoRetorno {
   @ApiModelProperty()

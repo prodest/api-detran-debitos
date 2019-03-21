@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { MsgErro } from './enuns/msgErro.enum';
-import { ObterTiposDebitosResultDTO } from './wsib/obterTiposDebitosResult.dto';
+import { ObterTiposDebitosResultDTO } from './wsib_models/obterTiposDebitosResult.dto';
 
 export class TipoDebito {
   @ApiModelProperty()
@@ -44,7 +44,7 @@ export class TipoDebito {
   }
 
   private convert2boolean(str: string){
-    if(str === 'S'){
+    if (str === 'S') {
       return true;
     }else{
       return false;

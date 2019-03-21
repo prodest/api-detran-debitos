@@ -1,6 +1,6 @@
 import { ItemGuia } from './itemGuia.model';
 import { ApiModelProperty } from '@nestjs/swagger';
-import { GerarGuiaResultDTO } from './wsib/gerarGuiaResult.dto';
+import { GerarGuiaResultDTO } from './wsib_models/gerarGuiaResult.dto';
 
 export class GerarGuiaRetorno {
   @ApiModelProperty({type: [ItemGuia]})

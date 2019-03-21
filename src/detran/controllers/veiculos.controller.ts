@@ -6,7 +6,6 @@ import { ApiOperation, ApiResponse, ApiImplicitParam, ApiUseTags, ApiImplicitBod
 import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
 import { Debito } from '../models/debito.model';
 import { DebitoRetorno } from '../models/debitoRetorno.model';
-import { MsgErro } from '../models/enuns/msgErro.enum';
 import { GerarGuiaRetorno } from '../models/gerarGuiaRetorno.model';
 import { TipoDebito } from '../models/tipoDebito.model';
 import { VeiculosService } from '../services/veiculos.service';
@@ -209,7 +208,7 @@ export class VeiculosController {
     }
   }
 
-  // @Get( 'debitos/getGuia/:codigoBarra' )
+  // @Get( 'debitos/get-guia/:codigoBarra' )
   // @ApiOperation( {
   //   description: 'Retornar um pdf da guia para pagamento.',
   //   title: 'Guia PDF',
