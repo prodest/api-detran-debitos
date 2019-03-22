@@ -10,7 +10,7 @@ export class DebitoRetorno {
   @ApiModelProperty()
   mensagemErro?: string;
 
-  constructor(debits: ObterDebitosResultDTO) {
+  constructor(debits: ObterDebitosResultDTO, tipo_debito?: string) {
 
     if (debits.MensagemErro) {
       this.mensagemErro = debits.MensagemErro;
@@ -19,7 +19,7 @@ export class DebitoRetorno {
     } else if (debits.Debito !== null){
       this.debitos = new Array();
       for (const d of debits.Debito.Debito) {
-        this.debitos.push(new Debito(d));
+        this.debitos.push(new Debito(d, tipo_debito));
       }
     } else {
       this.debitos = new Array();

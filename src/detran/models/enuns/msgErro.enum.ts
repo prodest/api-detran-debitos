@@ -12,4 +12,5 @@ export enum MsgErro {
   DEB_RET_ERR = 'Ocorreu um erro ao buscar débitos.',
   CONT_GET_GUIA = 'DUA não encontrada. Por favor, gere uma nova.',
   MODL_TIPO_DEB_ERR = 'Ocorreu um erro ao gerar a prévia.',
+  FLAG_ERR = 'Ocorreu um erro desconhecido',
 }

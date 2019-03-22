@@ -1,5 +1,4 @@
-import { ClassDeb } from "../../models/enuns/classDeb.enum";
-
+import { ClassDeb } from '../../models/enuns/classDeb.enum';
 
 export abstract class DefineClasseDebitos {
 
@@ -37,6 +36,4 @@ export abstract class DefineClasseDebitos {
             return ClassDeb.CLASSE14;
         }
       }
-
-    
 }

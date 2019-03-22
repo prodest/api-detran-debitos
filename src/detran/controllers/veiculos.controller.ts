@@ -97,9 +97,9 @@ export class VeiculosController {
     description: 'Renavam do veiculo',
     required: true,
   } )
-  async getDebitosPreview( @Res() res: Response, @Param() params: ControllerVeiculosParams ) {
+  async getTiposDebitos( @Res() res: Response, @Param() params: ControllerVeiculosParams ) {
     try {
-      const resposta: TipoDebito = await this.veiculosService.getDebitosPreview( params );
+      const resposta: TipoDebito = await this.veiculosService.getTiposDebitos( params );
       res.status( HttpStatus.OK ).send( resposta);
     } catch (error) {
       throw new HttpException(error.mensagem, HttpStatus.FORBIDDEN);
@@ -129,9 +129,9 @@ export class VeiculosController {
     description: 'Tipo de debitos',
     required: true,
   } )
-  async getTiposDebitos( @Res() res: Response, @Param() params: ControllerVeiculosParams ) {
+  async getDebitosPorTipo( @Res() res: Response, @Param() params: ControllerVeiculosParams ) {
     try {
-      const resposta: DebitoRetorno = await this.veiculosService.getTiposDebitos( params );
+      const resposta: DebitoRetorno = await this.veiculosService.getDebitosPorTipo( params );
       res.status( HttpStatus.OK ).send( resposta.debitos );
     } catch (error) {
       throw new HttpException(error.mensagem, HttpStatus.FORBIDDEN);

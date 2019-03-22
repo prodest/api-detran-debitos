@@ -2,7 +2,7 @@ import { ApiModelProperty } from '@nestjs/swagger';
 import { DefineClasseDebitos } from '../common/config/defineClasseDebitos.config';
 import { ClassDeb } from './enuns/classDeb.enum';
 import { DebitoDTO } from './wsib_models/debito.dto';
-import { Flag } from './tipoFlag.model';
+import { TipoFlag } from './tipoFlag.model';
 
 export class Debito extends DefineClasseDebitos{
   @ApiModelProperty({
@@ -52,74 +52,13 @@ export class Debito extends DefineClasseDebitos{
   @ApiModelProperty()
   dpvatCotas: string;
 
-  // @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos DPVATANTERIOR. Valores:\
-  // 0 -> Não marcado (débito opcional);\
-  // 1 -> Marcado (não pode desmarcar, débito obrigatório);\
-  // 2 -> Marcado (pode desmarcar, débito opcional);\
-  // 3 -> Desabilitado (não exibir o débito).'})
-  // flagDpvatAnterior: number;
-
-  // @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos DPVAT. Valores:\
-  // 0 -> Não marcado (débito opcional);\
-  // 1 -> Marcado (não pode desmarcar, débito obrigatório);\
-  // 2 -> Marcado (pode desmarcar, débito opcional);\
-  // 3 -> Desabilitado (não exibir o débito).'})
-  // flagDpvatExercicio: number;
-
-  // @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos IPVAANTERIOR. Valores:\
-  // 0 -> Não marcado (débito opcional);\
-  // 1 -> Marcado (não pode desmarcar, débito obrigatório);\
-  // 2 -> Marcado (pode desmarcar, débito opcional);\
-  // 3 -> Desabilitado (não exibir o débito).'})
-  // flagIpvaAnterior: number;
-
-  // @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos IPVA. Valores:\
-  // 0 -> Não marcado (débito opcional);\
-  // 1 -> Marcado (não pode desmarcar, débito obrigatório);\
-  // 2 -> Marcado (pode desmarcar, débito opcional);\
-  // 3 -> Desabilitado (não exibir o débito).'})
-  // flagIpvaExercicio: number;
-
-  // @ApiModelProperty({description: 'Flag não utilizada no momento.'})
-  // flagIpvaParcelamento: number;
-
-  // @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos LICENCIAMENTOANTERIOR. Valores:\
-  // 0 -> Não marcado (débito opcional);\
-  // 1 -> Marcado (não pode desmarcar, débito obrigatório);\
-  // 2 -> Marcado (pode desmarcar, débito opcional);\
-  // 3 -> Desabilitado (não exibir o débito).'})
-  // flagLicenciamentoAnterior: number;
-
-  // @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos LICENCIAMENTOATUAL. Valores:\
-  // 0 -> Não marcado (débito opcional);\
-  // 1 -> Marcado (não pode desmarcar, débito obrigatório);\
-  // 2 -> Marcado (pode desmarcar, débito opcional);\
-  // 3 -> Desabilitado (não exibir o débito).'})
-  // flagLicenciamentoExercicio: number;
-
-  // @ApiModelProperty({description: 'Flag usado para gerar o boleto do tipo débitos MULTAS. Valores:\
-  // 0 -> Não marcado (débito opcional);\
-  // 1 -> Marcado (não pode desmarcar, débito obrigatório);\
-  // 2 -> Marcado (pode desmarcar, débito opcional);\
-  // 3 -> Desabilitado (não exibir o débito).'})
-  // flagMultas: number;
-
-  // @ApiModelProperty({description: 'Flag não utilizada no momento.'})
-  // flagTaxaEspecial: number;
-
-  // @ApiModelProperty({description: 'Flag não utilizada no momento.'})
-  // flagTaxaPatio: number;
-
-  // @ApiModelProperty({description: 'Flag não utilizada no momento.'})
-  // flagTaxaServico: number;
-
   @ApiModelProperty()
-  flags: Flag;
+  flag?: TipoFlag;
 
   @ApiModelProperty()
   ipvaCotas: string;
 
-  constructor(debito: DebitoDTO) {
+  constructor(debito: DebitoDTO, tipo_debito?: string) {
     super();
     this.descricaoServico = debito.DescricaoServico;
     this.valorAtualizadoFranquia = debito.ValorAtualizadoFranquia;
@@ -127,20 +66,15 @@ export class Debito extends DefineClasseDebitos{
     this.dpvatCotas = debito.DpvatCotas;
     this.idDebito = debito.IdDebito;
     this.placa = debito.Placa;
-    this.flags = new Flag(debito);
+    if (tipo_debito){
+      this.flag = new TipoFlag(debito, tipo_debito);
+    }
     this.codigoServico = debito.CodigoServico;
     this.classe = super.defineClasse(debito.Classe);
     this.exercicio = debito.Exercicio;
     this.parcela = debito.Parcela;
     this.ipvaCotas = debito.IpvaCotas;
   }
-
-  // tipoFlag = {
-  //   0 : {checked: false, disabled: false},
-  //   1 : {checked: true, disabled: true},
-  //   2 : {checked: true, disabled: false},
-  //   3 : {checked: false, disabled: false},
-  // };
 
   // tranforma_dados(debitos){
 
@@ -155,12 +89,6 @@ export class Debito extends DefineClasseDebitos{
   //     debito.flag = debito.flagIpvaParcelamento > -1 ? this.geraFlag(debito.flagIpvaParcelamento) : debito.flag;
   //     return debito;
   //   });
-
-  // }
-
-  // geraFlag(flag: number){
-
-  //   return this.tipoFlag[flag];
 
   // }
 }

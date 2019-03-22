@@ -81,25 +81,25 @@ describe( 'VeiculosService', () => {
       .toEqual( expect.arrayContaining( [] ) );
   } );
 
-  /* getDebitosPreview() */
-  it( 'getDebitosPreview() com dados válidos deve retornar uma lista de uma previa dos débitos', async () => {
+  /* getTiposDebitos() */
+  it( 'getTiposDebitos() com dados válidos deve retornar uma lista de uma previa dos débitos', async () => {
     params = {
       placa: 'VAL1705',
       renavam: '98765432101',
     };
-    const respostaDoTeste: TipoDebito = await service.getDebitosPreview( params );
+    const respostaDoTeste: TipoDebito = await service.getTiposDebitos( params );
     expect( Object.keys(respostaDoTeste)[0] )
       .toBe( 'temLicenciamentoAtual' );
   } );
 
-  /* getTiposDebitos() */
-  it( 'getTiposDebitos() com dados válidos deve retornar uma lista com somente um tipo de débito', async () => {
+  /* getDebitosPorTipo() */
+  it( 'getDebitosPorTipo() com dados válidos deve retornar uma lista com somente um tipo de débito', async () => {
     params = {
       placa: 'VAL1705',
       renavam: '98765432101',
       tipo_debito: 'IPVA',
     };
-    const respostaDoTeste: DebitoRetorno = await service.getTiposDebitos( params );
+    const respostaDoTeste: DebitoRetorno = await service.getDebitosPorTipo( params );
     expect( respostaDoTeste.debitos[0].descricaoServico )
       .toBe( 'IPVA 4ª Cota 2018' );
   } );
