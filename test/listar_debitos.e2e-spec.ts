@@ -3,11 +3,11 @@ import request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { DetranModule } from '../src/detran/detran.module';
-import { MsgErro } from '../src/detran/models/enuns/msgErro.enum';
 
 const feature = loadFeature( './test/features/listar_debitos.feature' );
 
 jest.mock( '../src/detran/repository/detran-soap-client' );
+jest.mock( '../src/detran/common/config/redis-async.config' );
 
 let resposta: any;
 let placa: string;

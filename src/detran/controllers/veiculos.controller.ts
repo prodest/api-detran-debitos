@@ -14,6 +14,7 @@ import { RedisAsync } from '../common/config/redis-async.config';
 import { MsgErro } from '../models/enuns/msgErro.enum';
 
 const redisAsync = new RedisAsync();
+
 @Controller( 'veiculos' )
 @ApiUseTags('veiculos-debitos')
 export class VeiculosController {

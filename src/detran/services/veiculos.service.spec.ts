@@ -8,9 +8,9 @@ import { DebitoRetorno } from '../models/debitoRetorno.model';
 import { TipoDebito } from '../models/tipoDebito.model';
 import { GerarGuiaRetorno } from '../models/gerarGuiaRetorno.model';
 import { ListaIDs } from '../models/listaIDs.dto';
-import { RedisAsync } from '../common/config/__mocks__/redis-async.config';
 
 jest.mock( '../repository/detran-soap-client.ts' );
+jest.mock( '../common/config/redis-async.config' );
 
 let params: ControllerVeiculosParams;
 let listaIDs: ListaIDs;
@@ -165,5 +165,6 @@ describe( 'VeiculosService', () => {
   } );
 
   afterAll( async () => {
+    
   } );
 } );

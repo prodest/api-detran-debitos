@@ -3,15 +3,13 @@ import request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { DetranModule } from '../src/detran/detran.module';
-// import { AppModule } from '../src/app.module';
 import { ListaIDs } from '../src/detran/models/listaIDs.dto';
 import { MsgErro } from '../src/detran/models/enuns/msgErro.enum';
-import { RedisAsync } from '../src/detran/common/config/__mocks__/redis-async.config';
 
 const feature = loadFeature( './test/features/gerar_GRU.feature' );
 
 jest.mock( '../src/detran/repository/detran-soap-client' );
-jest.mock( '../src/detran/common/config/redis-async.config.ts' );
+jest.mock( '../src/detran/common/config/redis-async.config' );
 
 let resposta: any;
 let placa: string;
@@ -83,7 +81,7 @@ defineFeature( feature, test => {
         .send(listaIDs);
     } );
     then( 'o sistema retorna uma mensagem informando que é necessário selecionar os outros débitos obrigatórios', () => {
-      dataVehicle = resposta.body; 
+      dataVehicle = resposta.body;
       expect( dataVehicle.message ).toContain( MsgErro.SERV_GERAR_GUIA_OBR );
     } );
   } );
