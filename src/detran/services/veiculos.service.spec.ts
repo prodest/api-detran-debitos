@@ -1,13 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { VeiculosService } from './veiculos.service';
 import { MsgErro } from '../models/enuns/msgErro.enum';
-import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
+import { ControllerVeiculosParams } from '../models/controller_model/controllerVeiculosParams';
 import { DetranModule } from '../detran.module';
 import { VeiculoRetorno } from '../models/veiculoRetorno.model';
 import { DebitoRetorno } from '../models/debitoRetorno.model';
 import { TipoDebito } from '../models/tipoDebito.model';
 import { GerarGuiaRetorno } from '../models/gerarGuiaRetorno.model';
 import { ListaIDs } from '../models/listaIDs.dto';
+import { RedisAsync } from '../common/config/__mocks__/redis-async.config';
 
 jest.mock( '../repository/detran-soap-client.ts' );
 
@@ -119,10 +120,10 @@ describe( 'VeiculosService', () => {
     params = {
       placa: 'ABC1234',
       renavam: '98765432101',
-      tipo_debito: 'dpvat',
+      tipo_debito: 'licenciamentoatual',
     };
     listaIDs = {
-      lista: [78994446, 84677037],
+      lista: [84677125],
     };
 
     const respostaDoTeste = await service.gerarGRUParcial( params, listaIDs.lista );
@@ -134,7 +135,7 @@ describe( 'VeiculosService', () => {
     params = {
       placa: 'ABC1234',
       renavam: '98765432101',
-      tipo_debito: 'dpvat',
+      tipo_debito: 'licenciamentoatual',
     };
     listaIDs = {
       lista: [84677037],
@@ -144,7 +145,7 @@ describe( 'VeiculosService', () => {
       const respostaDoTeste = await service.gerarGRUParcial( params, listaIDs.lista );
     } catch (error) {
       expect( error.mensagem )
-      .toBe( '' );
+      .toBe( MsgErro.SERV_GERAR_GUIA_OBR );
     }
   } );
 
@@ -161,5 +162,8 @@ describe( 'VeiculosService', () => {
         ' Não é possível escolher cota única e as demais cotas de IPVA para o mesmo exercício. Verifique conjunto de débitos.',
         );
     }
+  } );
+
+  afterAll( async () => {
   } );
 } );

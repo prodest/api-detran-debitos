@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { ControllerVeiculosParams } from '../common/controllerVeiculosParams';
-import { MensagemErro } from '../common/mensagemErro';
+import { ControllerVeiculosParams } from '../models/controller_model/controllerVeiculosParams';
+import { MensagemErro } from '../common/mensagem_erro/mensagemErro';
 import { DebitoRetorno } from '../models/debitoRetorno.model';
 import { MsgErro } from '../models/enuns/msgErro.enum';
-import { TypeDeb } from '../models/enuns/typeDeb.enum';
 import { GerarGuiaRetorno } from '../models/gerarGuiaRetorno.model';
 import { TipoDebito } from '../models/tipoDebito.model';
 import { VeiculoConsulta } from '../models/veiculoConsulta.model';
@@ -133,6 +132,7 @@ export class VeiculosService {
 
     try {
       let deb: DebitoRetorno = await this.getDebitos(params);
+
       if (deb.debitos === []) {
         throw new MensagemErro(MsgErro.DEB_RET_VAZIO);
       } else {
@@ -174,37 +174,12 @@ export class VeiculosService {
     let deb: DebitoRetorno;
 
     try {
-      deb = await this.getDebitosPorTipo(params);
+      deb = await this.getDebitosPorTipo(params);      
       if (deb[0] === MsgErro.DEB_RET_VAZIO) {
         validoListaIDs = false;
       } else {
         try {
           validoListaIDs = await this.validaListaDebitos(deb, listaIDs);
-          // switch (params.tipo_debito.toUpperCase()) {
-          //   case TypeDeb.LICATUAL:
-          //     validoListaIDs = await this.validaLicenciamentoAtual(deb, listaIDs);
-          //     break;
-          //   case TypeDeb.LICANTER:
-          //     validoListaIDs = await this.validaLicenciamentoAnterior(deb, listaIDs);
-          //     break;
-          //   case TypeDeb.IPVAATUAL:
-          //     validoListaIDs = await this.validaIPVA(deb, listaIDs);
-          //     break;
-          //   case TypeDeb.IPVAANTER:
-          //     validoListaIDs = await this.validaIPVAAnterior(deb, listaIDs);
-          //     break;
-          //   case TypeDeb.DPVATATUA:
-          //     validoListaIDs = await this.validaDPVAT(deb, listaIDs);
-          //     break;
-          //   case TypeDeb.DPVATANTE:
-          //     validoListaIDs = await this.validaDPVATAnterior(deb, listaIDs);
-          //     break;
-          //   case TypeDeb.MULTA:
-          //     validoListaIDs = await this.validaMulta(deb, listaIDs);
-          //     break;
-          //   default:
-          //   throw new MensagemErro(MsgErro.SERV_GERAR_GUIA_TYP);
-          // }
         } catch (error) {
           throw new MensagemErro(MsgErro.SERV_GERAR_GUIA_VAL);
         }
@@ -237,6 +212,10 @@ export class VeiculosService {
 
   async validaListaDebitos(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
     try {
+
+      if(await this.validaIPVA(deb, listaIDs) === false){
+        return false;
+      }
       for (const debito of deb.debitos) {
         if (debito.flag.checked === true && debito.flag.disabled === true) {
           const index = listaIDs.indexOf(debito.idDebito);
@@ -250,129 +229,31 @@ export class VeiculosService {
       return false;
     }
   }
-  // async validaLicenciamentoAtual(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
-  //   try {
-  //     for (const debito of deb.debitos) {
-  //       if (debito.flagLicenciamentoExercicio === 1) {
-  //         const index = listaIDs.indexOf(debito.idDebito);
-  //         if (index <= -1) {
-  //           return false;
-  //         }
-  //       }
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // }
 
-  // async validaLicenciamentoAnterior(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
-  //   try {
-  //     for (const debito of deb.debitos) {
-  //       if (debito.flagLicenciamentoAnterior === 1) {
-  //         const index = listaIDs.indexOf(debito.idDebito);
-  //         if (index <= -1) {
-  //           return false;
-  //         }
-  //       }
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // }
 
-  // async validaIPVA(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
-  //   let ipvaCotasMaisNovo: number = 0;
-  //   try {
-  //     for (const debito of deb.debitos) {
-  //       const index = listaIDs.indexOf(debito.idDebito);
-  //       if (index > -1 && ipvaCotasMaisNovo < Number(debito.ipvaCotas)) {
-  //         ipvaCotasMaisNovo = Number(debito.ipvaCotas);
-  //       }
-  //     }
+  async validaIPVA(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
+    let ipvaCotasMaisNovo: number = 0;
+    try {
+      for (const debito of deb.debitos) {
+        const index = listaIDs.indexOf(debito.idDebito);
+        if (index > -1 && ipvaCotasMaisNovo < Number(debito.ipvaCotas)) {
+          ipvaCotasMaisNovo = Number(debito.ipvaCotas);
+        }
+      }
 
-  //     for (const debito of deb.debitos) {
-  //       const index = listaIDs.indexOf(debito.idDebito);
-  //       if (
-  //         debito.flagIpvaExercicio === 1 ||
-  //         (Number(debito.ipvaCotas) <= ipvaCotasMaisNovo &&
-  //           debito.parcela !== 0)
-  //       ) {
-  //         if (index <= -1) {
-  //           return false;
-  //         }
-  //       }
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // }
-
-  // async validaIPVAAnterior(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
-  //   try {
-  //     for (const debito of deb.debitos) {
-  //       const index = listaIDs.indexOf(debito.idDebito);
-  //       if (debito.flagIpvaAnterior === 1) {
-  //         if (index <= -1) {
-  //           return false;
-  //         }
-  //       }
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // }
-
-  // async validaDPVAT(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
-  //   try {
-  //     for (const debito of deb.debitos) {
-  //       if (debito.flagDpvatExercicio === 1) {
-  //         const index = listaIDs.indexOf(debito.idDebito);
-  //         if (index <= -1) {
-  //           return false;
-  //         }
-  //       }
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // }
-
-  // async validaDPVATAnterior(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
-  //   try {
-  //     for (const debito of deb.debitos) {
-  //       if (debito.flagDpvatAnterior === 1) {
-  //         const index = listaIDs.indexOf(debito.idDebito);
-  //         if (index <= -1) {
-  //           return false;
-  //         }
-  //       }
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // }
-
-  // async validaMulta(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
-  //   try {
-  //     for (const debito of deb.debitos) {
-  //       if (debito.flagMulta === 1) {
-  //         const index = listaIDs.indexOf(debito.idDebito);
-  //         if (index <= -1) {
-  //           return false;
-  //         }
-  //       }
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // }
+      for (const debito of deb.debitos) {
+        const index = listaIDs.indexOf(debito.idDebito);
+        if (Number(debito.ipvaCotas) <= ipvaCotasMaisNovo && debito.parcela !== 0) {
+          if (index <= -1) {
+            return false;
+          }
+        }
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 
   async verificaIpvaCotaUnica(params: ControllerVeiculosParams, debitos: DebitoRetorno): Promise<DebitoRetorno> {
     let ipvaCotaUnica: boolean = false;

@@ -6,10 +6,12 @@ import { DetranModule } from '../src/detran/detran.module';
 // import { AppModule } from '../src/app.module';
 import { ListaIDs } from '../src/detran/models/listaIDs.dto';
 import { MsgErro } from '../src/detran/models/enuns/msgErro.enum';
+import { RedisAsync } from '../src/detran/common/config/__mocks__/redis-async.config';
 
 const feature = loadFeature( './test/features/gerar_GRU.feature' );
 
 jest.mock( '../src/detran/repository/detran-soap-client' );
+jest.mock( '../src/detran/common/config/redis-async.config.ts' );
 
 let resposta: any;
 let placa: string;
@@ -45,9 +47,9 @@ defineFeature( feature, test => {
     } );
     when( 'o usuario escolher os debitos', () => {
       listaIDs = {
-        lista: [78994349],
+        lista: [78994827],
       };
-      tipoDebito = 'dpvat';
+      tipoDebito = 'ipva';
     } );
     when( 'solicita a geração da GRU', async () => {
       resposta = await request( app.getHttpServer() )

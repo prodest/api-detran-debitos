@@ -1,11 +1,14 @@
 import { DebitoDTO } from './wsib_models/debito.dto';
 import { TypeDeb } from './enuns/typeDeb.enum';
-import { MensagemErro } from '../common/mensagemErro';
+import { MensagemErro } from '../common/mensagem_erro/mensagemErro';
 import { MsgErro } from './enuns/msgErro.enum';
+import { ApiModelProperty } from '@nestjs/swagger';
 
 export class TipoFlag {
 
+    @ApiModelProperty()
     checked: boolean;
+    @ApiModelProperty()
     disabled: boolean;
 
     constructor(debito: DebitoDTO, tipo_debito: string) {
@@ -54,7 +57,7 @@ export class TipoFlag {
                 break;
             case 3:
                 this.checked = false;
-                this.disabled = false;
+                this.disabled = true;
                 break;
             default:
                 throw new MensagemErro(MsgErro.FLAG_ERR);

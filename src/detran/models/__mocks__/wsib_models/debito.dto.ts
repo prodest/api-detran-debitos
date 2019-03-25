@@ -55,10 +55,10 @@ export class DebitoDTO {
           this.DpvatCotas = '';
           this.IdDebito = 78994821;
           this.Placa = 'VAL1705';
-          this.IpvaExercicio = 1;
-          this.IpvaAnterior = 1;
+          this.IpvaExercicio = 0;
+          this.IpvaAnterior = -1;
           this.LicenciamentoExercicio = 1;
-          this.LicenciamentoAnterior = 1;
+          this.LicenciamentoAnterior = -1;
           this.TaxaServico = -1;
           this.Multas = -1;
           this.IpvaParcelamento = -1;
@@ -66,7 +66,7 @@ export class DebitoDTO {
           this.TaxaPatio = -1;
           this.DpvatExercicio = -1;
           this.DpvatAnterior = -1;
-          this.CodigoServico = 129;
+          this.CodigoServico = 8;
           this.Classe = 3;
           this.Exercicio = 2018;
           this.Parcela = 0;
