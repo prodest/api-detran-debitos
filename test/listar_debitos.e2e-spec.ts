@@ -3,9 +3,11 @@ import request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { DetranModule } from '../src/detran/detran.module';
+
 const feature = loadFeature( './test/features/listar_debitos.feature' );
-jest.mock( '../src/detran/detran.module' );
-jest.mock( '../src/detran/services/veiculos.service' );
+
+jest.mock( '../src/detran/repository/detran-soap-client' );
+jest.mock( '../src/detran/common/config/redis-async.config' );
 
 let resposta: any;
 let placa: string;
@@ -45,7 +47,7 @@ defineFeature( feature, test => {
       'o sistema retorna uma lista com a previa de todos os tipos de debitos',
       async () => {
       dataVehicle = resposta.body;
-      expect( Object.keys( dataVehicle )[0] ).toContain( 'temLicenciamentoAnual' );
+      expect( Object.keys( dataVehicle )[0] ).toContain( 'temLicenciamentoAtual' );
       },
     );
   } );
@@ -64,7 +66,7 @@ defineFeature( feature, test => {
     } );
     then( 'o sistema retorna uma lista com todos os debitos', async () => {
       dataVehicle = resposta.body;
-      expect( Object.keys( dataVehicle )[0] ).toContain( 'debitos' );
+      expect( dataVehicle[0].descricaoServico ).toContain( 'Licenciamento Anual 2018' );
     } );
   } );
 
@@ -89,7 +91,7 @@ defineFeature( feature, test => {
     } );
     then( 'o sistema retorna uma lista com o tipo de debito selecionado', () => {
       dataVehicle = resposta.body;
-      expect( Object.keys( dataVehicle )[0] ).toContain( 'debitos' );
+      expect( dataVehicle[0].descricaoServico ).toContain( 'IPVA 4ª Cota 2018' );
     } );
   } );
 
@@ -107,7 +109,7 @@ defineFeature( feature, test => {
     } );
     then( 'o sistema retorna uma lista com nenhum debito', async () => {
       dataVehicle = resposta.body;
-      expect( dataVehicle.debitos[0] ).toContain( 'Não foram encontrados debitos para esse veiculo.' );
+      expect( dataVehicle ).toEqual( expect.arrayContaining( [] ) );
     } );
   } );
 

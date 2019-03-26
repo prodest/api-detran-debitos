@@ -1,10 +1,29 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { ClassDeb } from './enum';
-import { DefineClasseDebitos } from '../common/config/defineClasseDebitos.config';
+import { DefineClasseDebitos } from './defineClasseDebitos.model';
+import { ClassDeb } from './enuns/classDeb.enum';
+import { DebitoDTO } from './wsib_models/debito.dto';
+import { TipoFlag } from './tipoFlag.model';
 
 export class Debito extends DefineClasseDebitos{
-  @ApiModelProperty()
-  classe: string;
+  @ApiModelProperty({
+    enum: [
+      'Licenciamento',
+      'Registro Veículo',
+      'IPVA',
+      'Seguro DPVAT',
+      'Multas',
+      'Vistoria',
+      'Certidões',
+      'Apreensão',
+      'Credenciamento',
+      'Diversos Veículos',
+      'Parcelamento IPVA',
+      'Placas',
+      'Pátio',
+      'Registro de Contrato',
+    ],
+  })
+  classe: ClassDeb;
 
   @ApiModelProperty()
   codigoServico: number;
@@ -31,45 +50,15 @@ export class Debito extends DefineClasseDebitos{
   valorAtualizadoFranquia: number;
 
   @ApiModelProperty()
-  flagDpvatAnterior: number;
-
-  @ApiModelProperty()
   dpvatCotas: string;
 
-  @ApiModelProperty()
-  flagDpvatExercicio: number;
-
-  @ApiModelProperty()
-  flagIpvaAnterior: number;
-
-  @ApiModelProperty()
-  flagIpvaExercicio: number;
-
-  @ApiModelProperty()
-  flagIpvaParcelamento: number;
-
-  @ApiModelProperty()
-  flagLicenciamentoAnterior: number;
-
-  @ApiModelProperty()
-  flagLicenciamentoExercicio: number;
-
-  @ApiModelProperty()
-  flagMultas: number;
-
-  @ApiModelProperty()
-  flagTaxaEspecial: number;
-
-  @ApiModelProperty()
-  flagTaxaPatio: number;
-
-  @ApiModelProperty()
-  flagTaxaServico: number;
+  @ApiModelProperty({type: TipoFlag})
+  flag?: TipoFlag;
 
   @ApiModelProperty()
   ipvaCotas: string;
 
-  constructor(debito: any) {
+  constructor(debito: DebitoDTO, tipo_debito?: string) {
     super();
     this.descricaoServico = debito.DescricaoServico;
     this.valorAtualizadoFranquia = debito.ValorAtualizadoFranquia;
@@ -77,17 +66,9 @@ export class Debito extends DefineClasseDebitos{
     this.dpvatCotas = debito.DpvatCotas;
     this.idDebito = debito.IdDebito;
     this.placa = debito.Placa;
-    this.flagIpvaExercicio = debito.IpvaExercicio;
-    this.flagIpvaAnterior = debito.IpvaAnterior;
-    this.flagLicenciamentoExercicio = debito.LicenciamentoExercicio;
-    this.flagLicenciamentoAnterior = debito.LicenciamentoAnterior;
-    this.flagTaxaServico = debito.TaxaServico;
-    this.flagMultas = debito.Multas;
-    this.flagIpvaParcelamento = debito.IpvaParcelamento;
-    this.flagTaxaEspecial = debito.TaxaEspecial;
-    this.flagTaxaPatio = debito.TaxaPatio;
-    this.flagDpvatExercicio = debito.DpvatExercicio;
-    this.flagDpvatAnterior = debito.DpvatAnterior;
+    if (tipo_debito){
+      this.flag = new TipoFlag(debito, tipo_debito);
+    }
     this.codigoServico = debito.CodigoServico;
     this.classe = super.defineClasse(debito.Classe);
     this.exercicio = debito.Exercicio;

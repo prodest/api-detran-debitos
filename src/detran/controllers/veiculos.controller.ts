@@ -1,20 +1,24 @@
-import { Controller, Get, Param, Res, HttpStatus, HttpException } from '@nestjs/common';
-import { VeiculosService } from '../services/veiculos.service';
-import { ApiOperation, ApiResponse, ApiImplicitParam, ApiUseTags } from '@nestjs/swagger';
-import { Retorno } from '../models/retorno.model';
+import { Controller, Get, Param, Res, HttpStatus, HttpException, Post, Body } from '@nestjs/common';
+import { Response } from 'express';
+import { ApiOperation, ApiResponse, ApiImplicitParam, ApiUseTags, ApiImplicitBody } from '@nestjs/swagger';
+
+import { ControllerVeiculosParams } from '../models/controller_model/controllerVeiculosParams';
 import { Debito } from '../models/debito.model';
-import { VeiculoRetorno } from '../models/veiculoRetorno.model';
-import { TipoDebito } from '../models/tipoDebito.model';
 import { DebitoRetorno } from '../models/debitoRetorno.model';
 import { GerarGuiaRetorno } from '../models/gerarGuiaRetorno.model';
+import { TipoDebito } from '../models/tipoDebito.model';
+import { VeiculosService } from '../services/veiculos.service';
+import { VeiculoRetorno } from '../models/veiculoRetorno.model';
+import { ListaIDs } from '../models/listaIDs.dto';
+import { RedisAsync } from '../common/config/redis-async.config';
+import { MsgErro } from '../models/enuns/msgErro.enum';
 
 @Controller( 'veiculos' )
 @ApiUseTags('veiculos-debitos')
 export class VeiculosController {
-  resposta: Retorno;
-  respostaErro: any;
 
-  constructor( private readonly veiculosService: VeiculosService ) { }
+  constructor( private readonly veiculosService: VeiculosService ) {
+  }
 
   @Get( ':placa/:renavam' )
   @ApiOperation( {
@@ -33,12 +37,12 @@ export class VeiculosController {
     description: 'Renavam do veiculo.',
     required: true,
   } )
-  async getDadosVeiculos( @Res() res, @Param() params ) {
+  async getDadosVeiculos( @Res() res: Response, @Param() params: ControllerVeiculosParams ) {
     try {
-      this.resposta = await this.veiculosService.getDadosVeiculos( params );
-      res.status( this.resposta.status ).send( this.resposta.res);
+      const resposta: VeiculoRetorno = await this.veiculosService.getDadosVeiculos( params );
+      res.status( HttpStatus.OK ).send( resposta );
     } catch ( error ) {
-      throw new HttpException('Error ao fazer a requisição dos dados do veiculo.', HttpStatus.FORBIDDEN);
+      throw new HttpException(error.mensagem, HttpStatus.FORBIDDEN);
     }
   }
 
@@ -59,12 +63,12 @@ export class VeiculosController {
     description: 'Renavam do veiculo',
     required: true,
   } )
-  async getDebitos( @Res() res, @Param() params ) {
+  async getDebitos( @Res() res: Response, @Param() params: ControllerVeiculosParams ) {
     try {
-      this.resposta = await this.veiculosService.getDebitos( params );
-      res.status( this.resposta.status ).send( this.resposta.res);
+      const resposta: DebitoRetorno = await this.veiculosService.getDebitos( params );
+      res.status( HttpStatus.OK ).send( resposta.debitos);
     } catch (error) {
-      throw new HttpException('Erro ao requisitar os débitos.', HttpStatus.FORBIDDEN);
+      throw new HttpException(error.mensagem, HttpStatus.FORBIDDEN);
     }
 
   }
@@ -86,18 +90,19 @@ export class VeiculosController {
     description: 'Renavam do veiculo',
     required: true,
   } )
-  async getDebitosPreview( @Res() res, @Param() params ) {
+  async getTiposDebitos( @Res() res: Response, @Param() params: ControllerVeiculosParams ) {
     try {
-      this.resposta = await this.veiculosService.getDebitosPreview( params );
-      res.status( this.resposta.status ).send( this.resposta.res);
+      const resposta: TipoDebito = await this.veiculosService.getTiposDebitos( params );
+      res.status( HttpStatus.OK ).send( resposta);
     } catch (error) {
-      throw new HttpException('Erro ao exibir preview dos debitos.', HttpStatus.FORBIDDEN);
+      throw new HttpException(error.mensagem, HttpStatus.FORBIDDEN);
     }
   }
 
   @Get( ':placa/:renavam/debitos-tipo/:tipo_debito' )
   @ApiOperation( {
-    description: 'Retorna uma lista de débitos do veiculo filtrada pelo tipo: LICENCIAMENTOATUAL, LICENCIAMETO ANTERIOR, IPVA, IPVAANTERIOR, DPVT, DPVATANTERIOR, MULTA',
+    description: 'Retorna uma lista de débitos do veiculo filtrada pelo tipo:\
+                  LICENCIAMENTOATUAL, LICENCIAMETO ANTERIOR, IPVA, IPVAANTERIOR, DPVT, DPVATANTERIOR, MULTA',
     title: 'Lista de débitos filtrado por tipo',
   } )
   @ApiResponse( { status: 200, description: 'Veiculo encontrado, retorna um array de debitos', type: Debito } )
@@ -117,12 +122,12 @@ export class VeiculosController {
     description: 'Tipo de debitos',
     required: true,
   } )
-  async getTiposDebitos( @Res() res, @Param() params ) {
+  async getDebitosPorTipo( @Res() res: Response, @Param() params: ControllerVeiculosParams ) {
     try {
-      this.resposta = await this.veiculosService.getTiposDebitos( params );
-      res.status( this.resposta.status ).send( this.resposta.res );
+      const resposta: DebitoRetorno = await this.veiculosService.getDebitosPorTipo( params );
+      res.status( HttpStatus.OK ).send( resposta.debitos );
     } catch (error) {
-      throw new HttpException('Erro ao exibir lista de debitos do tipo.', HttpStatus.FORBIDDEN);
+      throw new HttpException(error.mensagem, HttpStatus.FORBIDDEN);
     }
   }
 
@@ -143,17 +148,24 @@ export class VeiculosController {
     description: 'Renavam do veiculo',
     required: true,
   } )
-  async gerarGRU( @Res() res, @Param() params ) {
+  async gerarGRU( @Res() res: Response, @Param() params: ControllerVeiculosParams ) {
+    const redisAsync = new RedisAsync();
+    redisAsync.client.on('error', (err: Error) => {
+      // tslint:disable-next-line: no-console
+      console.log('Redis-Async Error: ' + err);
+    });
 
     try {
-      this.resposta = await this.veiculosService.gerarGRU( params);
-      res.status( this.resposta.status ).send( this.resposta.res );
-    } catch (error) {
-      throw new HttpException('Erro ao gerar a GRU.', HttpStatus.FORBIDDEN);
+      const resposta: GerarGuiaRetorno = await this.veiculosService.gerarGRU( params );
+      redisAsync.client.set(resposta.itensGuia[0].codigoBarra, resposta.guiaPDF);
+      redisAsync.client.expire(resposta.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME, 10));
+      res.status( HttpStatus.OK ).send( resposta );
+    } catch ( error ) {
+      throw new HttpException( error.mensagem, HttpStatus.FORBIDDEN );
     }
   }
 
-  @Get( ':placa/:renavam/debitos/guia/:tipo_debito/:listaIDs' )
+  @Post( ':placa/:renavam/debitos/guia/:tipo_debito' )
   @ApiOperation( {
     description: 'Retornar uma guia para pagamento dos debitos requisitados.',
     title: 'Gerar GRU de alguns debitos',
@@ -175,18 +187,56 @@ export class VeiculosController {
     description: 'tipo do debito',
     required: true,
   } )
-  @ApiImplicitParam( {
-    name: 'listaIDs',
-    description: 'Lista de IDs de debitos, separados por virgula',
+  @ApiImplicitBody( {
+    name: 'ListaIDs',
+    type: ListaIDs,
+    description: 'Array com os IDs dos debitos.',
     required: true,
   } )
-  async gerarGRUParcial( @Res() res, @Param() params ) {
-
+  async gerarGRUParcial( @Res() res: Response, @Param() params: ControllerVeiculosParams, @Body() listaIDs: ListaIDs ) {
+    const redisAsync = new RedisAsync();
+    redisAsync.client.on('error', (err: Error) => {
+      // tslint:disable-next-line: no-console
+      console.log('Redis-Async Error: ' + err);
+    });
     try {
-      this.resposta = await this.veiculosService.gerarGRUParcial( params);
-      res.status( this.resposta.status ).send( this.resposta.res );
+      const resposta: GerarGuiaRetorno = await this.veiculosService.gerarGRUParcial( params, listaIDs.lista );
+      redisAsync.client.set(resposta.itensGuia[0].codigoBarra, resposta.guiaPDF);
+      redisAsync.client.expire(resposta.itensGuia[0].codigoBarra, parseInt(process.env.REDIS_GUIA_TIME, 10));
+      res.status( HttpStatus.OK ).send( resposta );
     } catch (error) {
-      throw new HttpException('Erro ao gerar a GRU.', HttpStatus.FORBIDDEN);
+      throw new HttpException(error.mensagem, HttpStatus.FORBIDDEN);
+    }
+  }
+
+  @Get( 'debitos/get-guia/:codigoBarra' )
+  @ApiOperation( {
+    description: 'Retornar um pdf da guia para pagamento.',
+    title: 'Guia PDF',
+  } )
+  @ApiResponse( { status: 200, description: 'Guia encontrada, retorna uma guia em pdf ', type: DebitoRetorno } )
+  @ApiResponse( { status: 403, description: 'Retorna uma MensagemErro' } )
+  @ApiImplicitParam( {
+    name: 'codigoBarra',
+    description: 'Código de barras da guia gerada',
+    required: true,
+  } )
+  async getGuia( @Res() res: Response, @Param() params: {codigoBarra: string} ) {
+    const redisAsync = new RedisAsync();
+    redisAsync.client.on('error', (err: Error) => {
+      // tslint:disable-next-line: no-console
+      console.log('Redis-Async Error: ' + err);
+    });
+    try {
+      const pdf64: string = await redisAsync.client.get(params.codigoBarra);
+      const pdf: Buffer = Buffer.from(pdf64, 'base64');
+      const dataAtual: Date = new Date();
+
+      res.header('Content-Type', 'application/pdf')
+         .header('Content-Disposition', `inline; filename=dua_detran_${dataAtual.getTime()}.pdf`)
+         .status( HttpStatus.OK ).send(pdf);
+    } catch (error) {
+      throw new HttpException(MsgErro.CONT_GET_GUIA, HttpStatus.FORBIDDEN);
     }
   }
 

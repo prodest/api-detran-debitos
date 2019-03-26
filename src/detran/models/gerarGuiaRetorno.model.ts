@@ -1,18 +1,19 @@
 import { ItemGuia } from './itemGuia.model';
 import { ApiModelProperty } from '@nestjs/swagger';
+import { GerarGuiaResultDTO } from './wsib_models/gerarGuiaResult.dto';
 
 export class GerarGuiaRetorno {
-  @ApiModelProperty()
+  @ApiModelProperty({type: [ItemGuia]})
   itensGuia: Array<ItemGuia>;
 
   @ApiModelProperty()
-  mensagemErro: string;
+  mensagemErro?: string;
 
   @ApiModelProperty()
   guiaPDF: string;
 
-  constructor(gerar_guia: any) {
-    if (Object.keys(gerar_guia)[0] === 'MensagemErro') {
+  constructor(gerar_guia: GerarGuiaResultDTO) {
+    if (gerar_guia.MensagemErro) {
       this.mensagemErro = gerar_guia.MensagemErro;
     } else if (gerar_guia === null || gerar_guia === undefined) {
       this.mensagemErro = 'Erro ao gerar guia.';

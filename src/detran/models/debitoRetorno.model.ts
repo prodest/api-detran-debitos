@@ -1,26 +1,28 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Debito } from './debito.model';
+import { MsgErro } from './enuns/msgErro.enum';
+import { ObterDebitosResultDTO } from './wsib_models/obterDebitosResult.dto';
 
 export class DebitoRetorno {
-  @ApiModelProperty()
-  debitos: Array<any>;
+  @ApiModelProperty({type: [Debito]})
+  debitos: Array<Debito>;
 
   @ApiModelProperty()
-  mensagemErro: string;
+  mensagemErro?: string;
 
-  constructor(debits: any) {
-    this.debitos = new Array();
+  constructor(debits: ObterDebitosResultDTO, tipo_debito?: string) {
 
-    if (Object.keys(debits)[0] === 'MensagemErro') {
+    if (debits.MensagemErro) {
       this.mensagemErro = debits.MensagemErro;
-    } else if (debits.Debito === null) {
-      this.debitos.push('Não foram encontrados debitos para esse veiculo.');
     } else if (debits === null || debits === undefined) {
-      this.mensagemErro = 'Erro ao buscar debitos.';
-    } else {
+      this.mensagemErro = MsgErro.DEB_RET_ERR;
+    } else if (debits.Debito !== null){
+      this.debitos = new Array();
       for (const d of debits.Debito.Debito) {
-        this.debitos.push(new Debito(d));
+        this.debitos.push(new Debito(d, tipo_debito));
       }
+    } else {
+      this.debitos = new Array();
     }
   }
 }

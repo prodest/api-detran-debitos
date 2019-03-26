@@ -3,9 +3,12 @@ import request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { DetranModule } from '../src/detran/detran.module';
+import { MsgErro } from '../src/detran/models/enuns/msgErro.enum';
+
 const feature = loadFeature( './test/features/acessar_dados_veiculo.feature' );
-jest.mock( '../src/detran/detran.module' );
-jest.mock( '../src/detran/services/veiculos.service' );
+
+jest.mock( '../src/detran/repository/detran-soap-client' );
+jest.mock( '../src/detran/common/config/redis-async.config' );
 
 let resposta: any;
 let placa: string;
@@ -35,7 +38,7 @@ defineFeature( feature, test => {
     given( 'informa o renavam do veiculo', async () => {
       renavam = '98765432101';
     } );
-    when( 'o usuario solicitar os dados do veiculo', async () => {
+    when('o usuario solicitar os dados do veiculo', async () => {
       resposta = await request( app.getHttpServer() )
         .get( `/veiculos/${placa}/${renavam}` );
       expect( resposta.status ).toBe( 200 );
@@ -44,7 +47,7 @@ defineFeature( feature, test => {
       'o sistema retorna os dados do veiculo',
       async () => {
         dataVehicle = resposta.body;
-        expect( Object.keys( dataVehicle ) ).toContain( 'placa' );
+        expect( Object.keys( dataVehicle )[0] ).toContain( 'placa' );
       },
     );
   } );
@@ -63,8 +66,8 @@ defineFeature( feature, test => {
     } );
     then( 'o sistema retorna uma mensagem informando que o veículo não existe', async () => {
       dataVehicle = resposta.body;
-      expect( dataVehicle.mensagemErro )
-        .toEqual( 'Veículo não encontrado.' );
+      expect( dataVehicle.message )
+        .toEqual( MsgErro.SERV_GET_DADOS_VEIC + ' Veículo não encontrado.' );
     } );
   } );
 
@@ -82,8 +85,8 @@ defineFeature( feature, test => {
     } );
     then( 'o sistema retorna uma mensagem informando que a consulta não é permitida para esse tipo de resgitro ativo', () => {
       dataVehicle = resposta.body;
-      expect( dataVehicle.mensagemErro )
-        .toEqual( 'Consulta não permitida para veículo com registro de furto/roubo ativo' );
+      expect( dataVehicle.message )
+        .toEqual( MsgErro.SERV_GET_DADOS_VEIC + ' Consulta não permitida para veículo com registro de furto/roubo ativo' );
     } );
   } );
   afterAll( async () => {

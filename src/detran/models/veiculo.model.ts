@@ -5,7 +5,7 @@ export class Veiculo {
   Placa: string;
 
   @ApiModelProperty()
-  CPF: string;
+  CPF?: string;
 
   @ApiModelProperty()
   Renavam: number;
