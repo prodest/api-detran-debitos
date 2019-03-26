@@ -3,7 +3,7 @@ import request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { DetranModule } from '../src/detran/detran.module';
-import { ListaIDs } from '../src/detran/models/listaIDs.dto';
+import { ListaIDsDTO } from '../src/detran/models/dto/listaIDs.dto';
 import { MsgErro } from '../src/detran/models/enuns/msgErro.enum';
 
 const feature = loadFeature( './test/features/gerar_GRU.feature' );
@@ -16,7 +16,7 @@ let placa: string;
 let renavam: string;
 let dataVehicle: any;
 let tipoDebito: string;
-let listaIDs: ListaIDs;
+let listaIDs: ListaIDsDTO;
 
 defineFeature( feature, test => {
   let module: TestingModule;

@@ -1,6 +1,6 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as soap from 'soap-as-promised';
-import { SegurancaDetran } from '../models/segurancaDetran.model';
+import { SegurancaDetran } from '../models/dto/segurancaDetran.dto';
 import { DebitosWS } from '../common/config/debitosWS.config';
 import { MsgErro } from '../models/enuns/msgErro.enum';
 

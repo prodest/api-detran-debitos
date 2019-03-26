@@ -2,18 +2,18 @@ import { Injectable } from '@nestjs/common';
 
 import { ControllerVeiculosParams } from '../models/controller_model/controllerVeiculosParams';
 import { MensagemErro } from '../common/mensagem_erro/mensagemErro';
-import { DebitoRetorno } from '../models/debitoRetorno.model';
+import { DebitoRetornoDTO } from '../models/dto/debitoRetorno.dto';
 import { MsgErro } from '../models/enuns/msgErro.enum';
-import { GerarGuiaRetorno } from '../models/gerarGuiaRetorno.model';
-import { TipoDebito } from '../models/tipoDebito.model';
-import { VeiculoConsulta } from '../models/veiculoConsulta.model';
-import { VeiculoRetorno } from '../models/veiculoRetorno.model';
+import { GerarGuiaRetornoDTO } from '../models/dto/gerarGuiaRetorno.dto';
+import { TipoDebitoDTO } from '../models/dto/tipoDebito.dto';
+import { VeiculoConsultaDTO } from '../models/dto/veiculoConsulta.dto';
+import { VeiculoRetornoDTO } from '../models/dto/veiculoRetorno.dto';
 import { DetranSoapClient } from '../repository/detran-soap-client';
-import { ObterDadosVeiculoResponseDTO } from '../models/wsib_models/obterDadosVeiculoResponse.dto';
-import { ObterDebitosResponseDTO } from '../models/wsib_models/obterDebitosResponse.dto';
-import { ObterTiposDebitosResponse } from '../models/wsib_models/obterTiposDebitosResponse.dto';
-import { ObterDebitosPorTipoDebitoResponseDTO } from '../models/wsib_models/obterDebitosPorTipoDebitoResponse.dto';
-import { GerarGuiaResponseDTO } from '../models/wsib_models/gerarGuiaResponse.dto';
+import { ObterDadosVeiculoResponse } from '../models/wsib_models/obterDadosVeiculoResponse.model';
+import { ObterDebitosResponse } from '../models/wsib_models/obterDebitosResponse.model';
+import { ObterTiposDebitosResponse } from '../models/wsib_models/obterTiposDebitosResponse.model';
+import { ObterDebitosPorTipoDebitoResponse } from '../models/wsib_models/obterDebitosPorTipoDebitoResponse.model';
+import { GerarGuiaResponse } from '../models/wsib_models/gerarGuiaResponse.model';
 
 @Injectable()
 export class VeiculosService {
@@ -23,8 +23,8 @@ export class VeiculosService {
     this.detranSoapClient = new DetranSoapClient();
   }
 
-  async getDadosVeiculos(params: ControllerVeiculosParams): Promise<VeiculoRetorno> {
-    const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
+  async getDadosVeiculos(params: ControllerVeiculosParams): Promise<VeiculoRetornoDTO> {
+    const veiculoConsulta: VeiculoConsultaDTO = new VeiculoConsultaDTO(params);
     const client = await this.detranSoapClient._client;
 
     if (Object.keys(client)[0] === 'mensagemErro') {
@@ -32,8 +32,8 @@ export class VeiculosService {
     }
 
     try {
-      const res: ObterDadosVeiculoResponseDTO = await client.ObterDadosVeiculo(veiculoConsulta);
-      const veiculoRetorno = new VeiculoRetorno(res.ObterDadosVeiculoResult);
+      const res: ObterDadosVeiculoResponse = await client.ObterDadosVeiculo(veiculoConsulta);
+      const veiculoRetorno = new VeiculoRetornoDTO(res.ObterDadosVeiculoResult);
       if (veiculoRetorno.mensagemErro){
         throw new MensagemErro(veiculoRetorno.mensagemErro);
       }
@@ -47,8 +47,8 @@ export class VeiculosService {
     }
   }
 
-  async getDebitos(params: ControllerVeiculosParams): Promise<DebitoRetorno> {
-    const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
+  async getDebitos(params: ControllerVeiculosParams): Promise<DebitoRetornoDTO> {
+    const veiculoConsulta: VeiculoConsultaDTO = new VeiculoConsultaDTO(params);
     const client = await this.detranSoapClient._client;
 
     if (Object.keys(client)[0] === 'mensagemErro') {
@@ -56,8 +56,8 @@ export class VeiculosService {
     }
 
     try {
-      const res: ObterDebitosResponseDTO = await client.ObterDebitos(veiculoConsulta);
-      const debitos = new DebitoRetorno(res.ObterDebitosResult);
+      const res: ObterDebitosResponse = await client.ObterDebitos(veiculoConsulta);
+      const debitos = new DebitoRetornoDTO(res.ObterDebitosResult);
       if (debitos.mensagemErro){
         throw new MensagemErro(debitos.mensagemErro);
       }
@@ -71,8 +71,8 @@ export class VeiculosService {
     }
   }
 
-  async getTiposDebitos(params: ControllerVeiculosParams): Promise<TipoDebito> {
-    const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
+  async getTiposDebitos(params: ControllerVeiculosParams): Promise<TipoDebitoDTO> {
+    const veiculoConsulta: VeiculoConsultaDTO = new VeiculoConsultaDTO(params);
     const client = await this.detranSoapClient._client;
 
     if (Object.keys(client)[0] === 'mensagemErro') {
@@ -81,7 +81,7 @@ export class VeiculosService {
 
     try {
       const res: ObterTiposDebitosResponse = await client.ObterTiposDebitos(veiculoConsulta);
-      const tipoDebito = new TipoDebito(res.ObterTiposDebitosResult);
+      const tipoDebito = new TipoDebitoDTO(res.ObterTiposDebitosResult);
       if (tipoDebito.mensagemErro){
         throw new MensagemErro(tipoDebito.mensagemErro);
       }
@@ -95,8 +95,8 @@ export class VeiculosService {
     }
   }
 
-  async getDebitosPorTipo(params: ControllerVeiculosParams): Promise<DebitoRetorno> {
-    const veiculoConsulta: VeiculoConsulta = new VeiculoConsulta(params);
+  async getDebitosPorTipo(params: ControllerVeiculosParams): Promise<DebitoRetornoDTO> {
+    const veiculoConsulta: VeiculoConsultaDTO = new VeiculoConsultaDTO(params);
     const client = await this.detranSoapClient._client;
 
     params.tipo_debito = params.tipo_debito.toUpperCase();
@@ -106,8 +106,8 @@ export class VeiculosService {
     }
 
     try {
-      const res: ObterDebitosPorTipoDebitoResponseDTO = await client.ObterDebitosPorTipoDebito(veiculoConsulta);
-      const debitos = new DebitoRetorno(res.ObterDebitosPorTipoDebitoResult, params.tipo_debito);
+      const res: ObterDebitosPorTipoDebitoResponse = await client.ObterDebitosPorTipoDebito(veiculoConsulta);
+      const debitos = new DebitoRetornoDTO(res.ObterDebitosPorTipoDebitoResult, params.tipo_debito);
       if (debitos.mensagemErro){
         throw new MensagemErro(debitos.mensagemErro);
       }
@@ -121,8 +121,8 @@ export class VeiculosService {
     }
   }
 
-  async gerarGRU(params: ControllerVeiculosParams): Promise<GerarGuiaRetorno> {
-    const veiculoConsulta = new VeiculoConsulta(params);
+  async gerarGRU(params: ControllerVeiculosParams): Promise<GerarGuiaRetornoDTO> {
+    const veiculoConsulta = new VeiculoConsultaDTO(params);
     const client = await this.detranSoapClient._client;
     const array_ids: Array<number> = new Array();
 
@@ -131,7 +131,7 @@ export class VeiculosService {
     }
 
     try {
-      let deb: DebitoRetorno = await this.getDebitos(params);
+      let deb: DebitoRetornoDTO = await this.getDebitos(params);
 
       if (deb.debitos === []) {
         throw new MensagemErro(MsgErro.DEB_RET_VAZIO);
@@ -152,8 +152,8 @@ export class VeiculosService {
     veiculoConsulta.listaDebitos = array_ids.toString();
 
     try {
-      const res: GerarGuiaResponseDTO = await client.GerarGuia(veiculoConsulta);
-      const guia: GerarGuiaRetorno = new GerarGuiaRetorno(res.GerarGuiaResult);
+      const res: GerarGuiaResponse = await client.GerarGuia(veiculoConsulta);
+      const guia: GerarGuiaRetornoDTO = new GerarGuiaRetornoDTO(res.GerarGuiaResult);
       if (guia.mensagemErro){
         throw new MensagemErro(guia.mensagemErro);
       }
@@ -167,14 +167,14 @@ export class VeiculosService {
     }
   }
 
-  async gerarGRUParcial(params: ControllerVeiculosParams, listaIDs: Array<number>): Promise<GerarGuiaRetorno> {
-    const veiculoConsulta = new VeiculoConsulta(params);
+  async gerarGRUParcial(params: ControllerVeiculosParams, listaIDs: Array<number>): Promise<GerarGuiaRetornoDTO> {
+    const veiculoConsulta = new VeiculoConsultaDTO(params);
     const client = await this.detranSoapClient._client;
     let validoListaIDs: boolean;
-    let deb: DebitoRetorno;
+    let deb: DebitoRetornoDTO;
 
     try {
-      deb = await this.getDebitosPorTipo(params);      
+      deb = await this.getDebitosPorTipo(params);
       if (deb[0] === MsgErro.DEB_RET_VAZIO) {
         validoListaIDs = false;
       } else {
@@ -192,8 +192,8 @@ export class VeiculosService {
 
     if (validoListaIDs === true) {
       try {
-        const res: GerarGuiaResponseDTO = await client.GerarGuia(veiculoConsulta);
-        const guia: GerarGuiaRetorno = new GerarGuiaRetorno(res.GerarGuiaResult);
+        const res: GerarGuiaResponse = await client.GerarGuia(veiculoConsulta);
+        const guia: GerarGuiaRetornoDTO = new GerarGuiaRetornoDTO(res.GerarGuiaResult);
         if (guia.mensagemErro){
           throw new MensagemErro(guia.mensagemErro);
         }
@@ -210,7 +210,7 @@ export class VeiculosService {
     }
   }
 
-  async validaListaDebitos(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
+  async validaListaDebitos(deb: DebitoRetornoDTO, listaIDs: Array<number>): Promise<boolean> {
     try {
 
       if(await this.validaIPVA(deb, listaIDs) === false){
@@ -231,7 +231,7 @@ export class VeiculosService {
   }
 
 
-  async validaIPVA(deb: DebitoRetorno, listaIDs: Array<number>): Promise<boolean> {
+  async validaIPVA(deb: DebitoRetornoDTO, listaIDs: Array<number>): Promise<boolean> {
     let ipvaCotasMaisNovo: number = 0;
     try {
       for (const debito of deb.debitos) {
@@ -255,11 +255,11 @@ export class VeiculosService {
     }
   }
 
-  async verificaIpvaCotaUnica(params: ControllerVeiculosParams, debitos: DebitoRetorno): Promise<DebitoRetorno> {
+  async verificaIpvaCotaUnica(params: ControllerVeiculosParams, debitos: DebitoRetornoDTO): Promise<DebitoRetornoDTO> {
     let ipvaCotaUnica: boolean = false;
     let cotaUniExerc: number = -1;
     const regExIpvaCotas = /^\d{4}0$/g;
-    let ipvaDebitos: DebitoRetorno;
+    let ipvaDebitos: DebitoRetornoDTO;
 
     params.tipo_debito = 'ipva';
     ipvaDebitos = await this.getDebitosPorTipo(params);
