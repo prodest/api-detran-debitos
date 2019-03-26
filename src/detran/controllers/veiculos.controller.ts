@@ -13,17 +13,11 @@ import { ListaIDs } from '../models/listaIDs.dto';
 import { RedisAsync } from '../common/config/redis-async.config';
 import { MsgErro } from '../models/enuns/msgErro.enum';
 
-const redisAsync = new RedisAsync();
-
 @Controller( 'veiculos' )
 @ApiUseTags('veiculos-debitos')
 export class VeiculosController {
 
   constructor( private readonly veiculosService: VeiculosService ) {
-    redisAsync.client.on('error', (err: Error) => {
-      // tslint:disable-next-line: no-console
-      console.log('Redis-Async Error: ' + err);
-    });
   }
 
   @Get( ':placa/:renavam' )
@@ -155,6 +149,11 @@ export class VeiculosController {
     required: true,
   } )
   async gerarGRU( @Res() res: Response, @Param() params: ControllerVeiculosParams ) {
+    const redisAsync = new RedisAsync();
+    redisAsync.client.on('error', (err: Error) => {
+      // tslint:disable-next-line: no-console
+      console.log('Redis-Async Error: ' + err);
+    });
 
     try {
       const resposta: GerarGuiaRetorno = await this.veiculosService.gerarGRU( params );
@@ -195,7 +194,11 @@ export class VeiculosController {
     required: true,
   } )
   async gerarGRUParcial( @Res() res: Response, @Param() params: ControllerVeiculosParams, @Body() listaIDs: ListaIDs ) {
-
+    const redisAsync = new RedisAsync();
+    redisAsync.client.on('error', (err: Error) => {
+      // tslint:disable-next-line: no-console
+      console.log('Redis-Async Error: ' + err);
+    });
     try {
       const resposta: GerarGuiaRetorno = await this.veiculosService.gerarGRUParcial( params, listaIDs.lista );
       redisAsync.client.set(resposta.itensGuia[0].codigoBarra, resposta.guiaPDF);
@@ -219,7 +222,11 @@ export class VeiculosController {
     required: true,
   } )
   async getGuia( @Res() res: Response, @Param() params: {codigoBarra: string} ) {
-
+    const redisAsync = new RedisAsync();
+    redisAsync.client.on('error', (err: Error) => {
+      // tslint:disable-next-line: no-console
+      console.log('Redis-Async Error: ' + err);
+    });
     try {
       const pdf64: string = await redisAsync.client.get(params.codigoBarra);
       const pdf: Buffer = Buffer.from(pdf64, 'base64');
