@@ -1,10 +1,10 @@
-import { ItemGuia } from './itemGuia.dto';
+import { ItemGuiaDTO } from './itemGuia.dto';
 import { ApiModelProperty } from '@nestjs/swagger';
 import { GerarGuiaResult } from '../wsib_models/gerarGuiaResult.model';
 
 export class GerarGuiaRetornoDTO {
-  @ApiModelProperty({type: [ItemGuia]})
-  itensGuia: Array<ItemGuia>;
+  @ApiModelProperty({type: [ItemGuiaDTO]})
+  itensGuia: Array<ItemGuiaDTO>;
 
   @ApiModelProperty()
   mensagemErro?: string;
@@ -20,7 +20,7 @@ export class GerarGuiaRetornoDTO {
     } else {
       this.itensGuia = new Array();
       for (const item of gerar_guia.Guia.ItemGuia) {
-        this.itensGuia.push(new ItemGuia(item));
+        this.itensGuia.push(new ItemGuiaDTO(item));
       }
       this.guiaPDF = gerar_guia.GuiaPDF;
     }

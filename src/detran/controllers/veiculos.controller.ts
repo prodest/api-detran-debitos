@@ -12,7 +12,6 @@ import { VeiculoRetornoDTO } from '../models/dto/veiculoRetorno.dto';
 import { ListaIDsDTO } from '../models/dto/listaIDs.dto';
 import { RedisAsync } from '../common/config/redis-async.config';
 import { MsgErro } from '../models/enuns/msgErro.enum';
-import { Guia } from '../models/wsib_models/guia.model';
 
 @Controller( 'veiculos' )
 @ApiUseTags('veiculos-debitos')
@@ -24,7 +23,7 @@ export class VeiculosController {
   @Get( ':placa/:renavam' )
   @ApiOperation( {
     description: 'Retorna os dados do veículo.',
-    title: 'Dados do veículo. Retorna',
+    title: 'Dados do veículo. Ex.: placa: "ABC1234", renavam: "000123456789", modelo: "UNO MILE"',
   } )
   @ApiResponse( { status: 200, description: 'Retorna informações do veículo.', type: VeiculoRetornoDTO } )
   @ApiResponse( { status: 403, description: 'Retorna uma MensagemErro.' } )
@@ -50,7 +49,7 @@ export class VeiculosController {
   @Get( ':placa/:renavam/debitos' )
   @ApiOperation( {
     description: 'Retorna uma lista com os débitos do veículo.',
-      title: 'Débitos do veículo. Ex.:: /veiculos/VAL1705/1234567910/debitos',
+      title: 'Débitos do veículo. Ex.: descricaoServico, dataVencimento e valorAtualizadoFranquia.',
   } )
   @ApiResponse( { status: 200, description: 'Veículo encontrado, retorna um array de débitos.', type: DebitoDTO } )
   @ApiResponse( { status: 403, description: 'Retorna uma MensagemErro.' } )
@@ -77,7 +76,8 @@ export class VeiculosController {
   @Get( ':placa/:renavam/debitos-preview' )
   @ApiOperation( {
     description: 'Retorna um objeto com os tipos de débitos dizendo se ele possui ou não débitos daquele tipo.',
-    title: 'Prévia dos débitos do veículo. Ex.: /veiculos/VAL1705/1234567910/debitos-preview',
+    title: 'Prévia dos débitos do veículo. Ex.: temLicenciamentoAtual,\
+    temLicenciamentoAnterior e temDPVAT.',
   } )
   @ApiResponse( { status: 200, description: 'Veículo encontrado, retorna om objeto com os tipos de débitos.', type: TipoDebitoDTO } )
   @ApiResponse( { status: 403, description: 'Retorna uma MensagemErro.' } )
@@ -106,7 +106,7 @@ export class VeiculosController {
     LICENCIAMENTOATUAL, LICENCIAMETO ANTERIOR, IPVA, IPVAANTERIOR, DPVT, DPVATANTERIOR, MULTA.\
     A flag presentes nos objetos do tipo \'Debito\' retornados determinam se o débito é obrigatório na hora\
     de gerar a guia para o pagamento.',
-    title: 'Lista de débitos filtrado por tipo. Ex.: /veiculos/VAL1705/1234567910/debitos-tipo/licenciamentoatual',
+    title: 'Lista de débitos filtrado por tipo. Ex.: descricaoServico, dataVencimento e valorAtualizadoFranquia.',
   } )
   @ApiResponse( { status: 200, description: 'Veículo encontrado, retorna um array de débitos.', type: DebitoDTO } )
   @ApiResponse( { status: 403, description: 'Retorna uma MensagemErro.' } )
@@ -138,7 +138,7 @@ export class VeiculosController {
   @ApiOperation( {
     description: 'Retornar um objeto com um Array de ItensGuia, que contém informações como o número do código de barras\
     e o valor da guia, e o PDF da guia em base64. Usado para quando se quer pagar todos os débitos.',
-    title: 'Gerar GRU de todos os débitos. Ex.: /veiculos/VAL1705/1234567910/debitos/guia',
+    title: 'Gerar GRU de todos os débitos. Ex.: codigoBarra, vencimentoGuia, valorGuia, guiaPDF.',
   } )
   @ApiResponse( { status: 200, description: 'Veículo encontrado, retorna o um array de itens\
   e o pdf do boleto, em base64.', type: GerarGuiaRetornoDTO } )
@@ -175,10 +175,10 @@ export class VeiculosController {
     description: 'Retornar um objeto com um Array de ItensGuia, que contém informações como o número do código de barras\
     e o valor da guia, e o PDF da guia em base64, de um determinado tipo de débito. Usado quando pra quando se quer\
     pagar alguns débitos.',
-    title: 'Gerar GRU de alguns débitos. Ex.: /veiculos/VAL1705/1234567910/debitos/guia/licenciamentoatual',
+    title: 'Gerar GRU de alguns débitos. Ex.: codigoBarra, vencimentoGuia, valorGuia, guiaPDF.',
   } )
   @ApiResponse( { status: 200, description: 'Veículo encontrado, retorna o um array de itens \
-  e o pdf em base64 do boleto.', type: Guia } )
+  e o pdf em base64 do boleto.', type: GerarGuiaRetornoDTO } )
   @ApiResponse( { status: 403, description: 'Retorna uma MensagemErro.' } )
   @ApiImplicitParam( {
     name: 'placa',
@@ -220,7 +220,7 @@ export class VeiculosController {
   @Get( 'debitos/get-guia/:codigoBarra' )
   @ApiOperation( {
     description: 'Retornar o pdf da guia para pagamento.',
-    title: 'Guia PDF. Ex.: /veiculos/debitos/get-guia/85800000002215102192019000000000080000000000',
+    title: 'Guia PDF.',
   } )
   @ApiResponse( { status: 200, description: 'Guia encontrada, retorna uma guia em pdf.' } )
   @ApiResponse( { status: 403, description: 'Retorna uma MensagemErro.' } )

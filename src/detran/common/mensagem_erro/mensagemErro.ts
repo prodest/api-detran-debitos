@@ -4,7 +4,11 @@ export class MensagemErro {
     @ApiModelProperty()
     readonly mensagem: string;
 
-    constructor( message: string ) {
-        this.mensagem = message;;
+    @ApiModelProperty()
+    readonly status?: number;
+
+    constructor( message: string, status?: number ) {
+        this.mensagem = message;
+        this.status = status;
     }
 }

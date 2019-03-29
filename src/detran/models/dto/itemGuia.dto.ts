@@ -2,7 +2,7 @@ import { ApiModelProperty } from '@nestjs/swagger';
 import { DefineClasseDebitosDTO } from './defineClasseDebitos.dto';
 import { ClassDeb } from '../enuns/classDeb.enum';
 
-export class ItemGuia extends DefineClasseDebitosDTO {
+export class ItemGuiaDTO extends DefineClasseDebitosDTO {
   @ApiModelProperty({example: '85800000002-0  21510219201-5  90000000000-0  80000000000-0'})
   linhaDigitavel: string;
 
