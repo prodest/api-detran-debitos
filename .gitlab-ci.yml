@@ -1,6 +1,6 @@
 stages:
   - test
-  - quality
+#  - quality
   - build
   - deploy
 #  - stress
