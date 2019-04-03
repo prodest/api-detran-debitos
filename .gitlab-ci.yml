@@ -18,15 +18,15 @@ test_job:
      - npm run test
      - npm run test:e2e
 
-quality_job:
-  image: registry.es.gov.br/espm/infraestrutura/containers/sonar-scanner:3.3.0.1492
-  stage: quality
-  dependencies:
-      - test_job    
-  script:
-   - npm install
-   - npm run test:cov
-   - sonar-scanner
+#quality_job:
+#  image: registry.es.gov.br/espm/infraestrutura/containers/sonar-scanner:3.3.0.1492
+#  stage: quality
+#  dependencies:
+#      - test_job    
+#  script:
+#   - npm install
+#   - npm run test:cov
+#   - sonar-scanner
 
 build_job:
   stage: build
