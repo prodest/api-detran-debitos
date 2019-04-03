@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.1"></a>
+## [1.1.1](https://gitlab.es.gov.br/espm/detran-debito/api-detran/compare/v1.1.0...v1.1.1) (2019-04-03)
+
+
+### Bug Fixes
+
+* **CI:** Bypass quality ([9cb6875](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/9cb6875))
+* **CI:** Bypass quality update ([3fa699d](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/3fa699d))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://gitlab.es.gov.br/espm/detran-debito/api-detran/compare/v1.0.1...v1.1.0) (2019-04-03)
 
