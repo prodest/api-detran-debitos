@@ -1,7 +1,10 @@
 NODE_ENV=development
+
+REDIS_PORT=6379
+REDIS_HOST=127.0.0.1
+REDIS_GUIA_TIME=60
 REDIS_CACHE_TIME=1 seconds
+
 DETRAN_USER=usuario
 DETRAN_PASS=senha
 DETRAN_URL=https://exemplo.com/service?wsdl
-#REDIS_HOST="127.0.0.1"
-#REDIS_PORT="6379"

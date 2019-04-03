@@ -1,11 +1,12 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as soap from 'soap-as-promised';
-import { SegurancaDetran } from '../models/segurancaDetran.model';
+import { SegurancaDetran } from '../models/dto/segurancaDetran.dto';
 import { DebitosWS } from '../common/config/debitosWS.config';
+import { MsgErro } from '../models/enuns/msgErro.enum';
 
 @Injectable()
 export class DetranSoapClient {
-    _client: any;
+    _client: any ;
     debitosWS: DebitosWS;
 
     constructor() {
@@ -22,9 +23,10 @@ export class DetranSoapClient {
             );
             return client;
         }).catch(error => {
+// tslint:disable-next-line: no-console
             console.error(error);
             return {
-                mensagemErro: 'Erro em conectar ao repositorio.',
+                mensagemErro: MsgErro.REPO_ERR,
             };
         });
     }

@@ -11,30 +11,30 @@
   "paths": {
     "/veiculos/{placa}/{renavam}": {
       "get": {
-        "summary": "Dados do veiculo",
-        "description": "retorna os dados do veiculo através do WebService InternetBanking",
+        "summary": "Dados do veículo. Ex.: placa: \"ABC1234\", renavam: \"000123456789\", modelo: \"UNO MILE\"",
+        "description": "Retorna os dados do veículo.",
         "parameters": [
           {
             "name": "renavam",
             "required": true,
             "in": "path",
-            "description": "Renavam do veiculo.",
+            "description": "Renavam do veículo.",
             "type": ""
           },
           {
             "name": "placa",
             "required": true,
             "in": "path",
-            "description": "Placa do veiculo",
+            "description": "Placa do veículo.",
             "type": ""
           }
         ],
         "responses": {
           "200": {
-            "description": "Retorna informações do veiculo ",
-            "schema": { "$ref": "#/definitions/VeiculoRetorno" }
+            "description": "Retorna informações do veículo.",
+            "schema": { "$ref": "#/definitions/VeiculoRetornoDTO" }
           },
-          "403": { "description": "Retorna uma MensagemErro" }
+          "403": { "description": "Retorna uma MensagemErro." }
         },
         "tags": ["veiculos-debitos"],
         "produces": ["application/json"],
@@ -43,30 +43,30 @@
     },
     "/veiculos/{placa}/{renavam}/debitos": {
       "get": {
-        "summary": "Débitos do veiculo",
-        "description": "retorna uma lista com os débitos do veiculo",
+        "summary": "Débitos do veículo. Ex.: descricaoServico, dataVencimento e valorAtualizadoFranquia.",
+        "description": "Retorna uma lista com os débitos do veículo.",
         "parameters": [
           {
             "name": "renavam",
             "required": true,
             "in": "path",
-            "description": "Renavam do veiculo",
+            "description": "Renavam do veículo.",
             "type": ""
           },
           {
             "name": "placa",
             "required": true,
             "in": "path",
-            "description": "Placa do veiculo",
+            "description": "Placa do veículo.",
             "type": ""
           }
         ],
         "responses": {
           "200": {
-            "description": "Veiculo encontrado, retorna um array de debitos",
-            "schema": { "$ref": "#/definitions/Debito" }
+            "description": "Veículo encontrado, retorna um array de débitos.",
+            "schema": { "$ref": "#/definitions/DebitoDTO" }
           },
-          "403": { "description": "Retorna uma MensagemErro" }
+          "403": { "description": "Retorna uma MensagemErro." }
         },
         "tags": ["veiculos-debitos"],
         "produces": ["application/json"],
@@ -75,30 +75,30 @@
     },
     "/veiculos/{placa}/{renavam}/debitos-preview": {
       "get": {
-        "summary": "Prévia dos débitos do veiculo",
-        "description": "Retorna uma previa dos débitos do veiculo",
+        "summary": "Prévia dos débitos do veículo. Ex.: temLicenciamentoAtual,    temLicenciamentoAnterior e temDPVAT.",
+        "description": "Retorna um objeto com os tipos de débitos dizendo se ele possui ou não débitos daquele tipo.",
         "parameters": [
           {
             "name": "renavam",
             "required": true,
             "in": "path",
-            "description": "Renavam do veiculo",
+            "description": "Renavam do veículo.",
             "type": ""
           },
           {
             "name": "placa",
             "required": true,
             "in": "path",
-            "description": "Placa do veiculo",
+            "description": "Placa do veículo.",
             "type": ""
           }
         ],
         "responses": {
           "200": {
-            "description": "Veiculo encontrado, retorna um array de debitos",
-            "schema": { "$ref": "#/definitions/TipoDebito" }
+            "description": "Veículo encontrado, retorna om objeto com os tipos de débitos.",
+            "schema": { "$ref": "#/definitions/TipoDebitoDTO" }
           },
-          "403": { "description": "Retorna uma MensagemErro" }
+          "403": { "description": "Retorna uma MensagemErro." }
         },
         "tags": ["veiculos-debitos"],
         "produces": ["application/json"],
@@ -107,37 +107,37 @@
     },
     "/veiculos/{placa}/{renavam}/debitos-tipo/{tipo_debito}": {
       "get": {
-        "summary": "Lista de débitos filtrado por tipo",
-        "description": "Retorna uma lista de débitos do veiculo filtrada pelo tipo: LICENCIAMENTOATUAL, LICENCIAMETO ANTERIOR, IPVA, IPVAANTERIOR, DPVT, DPVATANTERIOR, MULTA",
+        "summary": "Lista de débitos filtrado por tipo. Ex.: descricaoServico, dataVencimento e valorAtualizadoFranquia.",
+        "description": "Retorna uma lista de débitos do veículo filtrada pelo tipo:    LICENCIAMENTOATUAL, LICENCIAMETO ANTERIOR, IPVA, IPVAANTERIOR, DPVT, DPVATANTERIOR, MULTA.    A flag presentes nos objetos do tipo 'Debito' retornados determinam se o débito é obrigatório na hora    de gerar a guia para o pagamento.",
         "parameters": [
           {
             "name": "tipo_debito",
             "required": true,
             "in": "path",
-            "description": "Tipo de debitos",
+            "description": "Tipo de débito.",
             "type": ""
           },
           {
             "name": "renavam",
             "required": true,
             "in": "path",
-            "description": "Renavam do veiculo",
+            "description": "Renavam do veículo.",
             "type": ""
           },
           {
             "name": "placa",
             "required": true,
             "in": "path",
-            "description": "Placa do veiculo",
+            "description": "Placa do veículo.",
             "type": ""
           }
         ],
         "responses": {
           "200": {
-            "description": "Veiculo encontrado, retorna um array de debitos",
-            "schema": { "$ref": "#/definitions/Debito" }
+            "description": "Veículo encontrado, retorna um array de débitos.",
+            "schema": { "$ref": "#/definitions/DebitoDTO" }
           },
-          "403": { "description": "Retorna uma MensagemErro" }
+          "403": { "description": "Retorna uma MensagemErro." }
         },
         "tags": ["veiculos-debitos"],
         "produces": ["application/json"],
@@ -146,76 +146,105 @@
     },
     "/veiculos/{placa}/{renavam}/debitos/guia": {
       "get": {
-        "summary": "Gerar GRU de todos os débitos",
-        "description": "Retornar uma GRU com todos os debitos ",
+        "summary": "Gerar GRU de todos os débitos. Ex.: codigoBarra, vencimentoGuia, valorGuia, guiaPDF.",
+        "description": "Retornar um objeto com um Array de ItensGuia, que contém informações como o número do código de barras    e o valor da guia, e o PDF da guia em base64. Usado para quando se quer pagar todos os débitos.",
         "parameters": [
           {
             "name": "renavam",
             "required": true,
             "in": "path",
-            "description": "Renavam do veiculo",
+            "description": "Renavam do veículo.",
             "type": ""
           },
           {
             "name": "placa",
             "required": true,
             "in": "path",
-            "description": "Placa do veiculo",
+            "description": "Placa do veículo.",
             "type": ""
           }
         ],
         "responses": {
           "200": {
-            "description": "Veiculo encontrado, retorna o um array de itens e o pdf do boleto, em base64",
-            "schema": { "$ref": "#/definitions/GerarGuiaRetorno" }
+            "description": "Veículo encontrado, retorna o um array de itens  e o pdf do boleto, em base64.",
+            "schema": { "$ref": "#/definitions/GerarGuiaRetornoDTO" }
           },
-          "403": { "description": "Retorna uma MensagemErro" }
+          "403": { "description": "Retorna uma MensagemErro." }
         },
         "tags": ["veiculos-debitos"],
         "produces": ["application/json"],
         "consumes": ["application/json"]
       }
     },
-    "/veiculos/{placa}/{renavam}/debitos/guia/{tipo_debito}/{listaIDs}": {
-      "get": {
-        "summary": "Gerar GRU de alguns debitos",
-        "description": "Retornar uma guia para pagamento dos debitos requisitados.",
+    "/veiculos/{placa}/{renavam}/debitos/guia/{tipo_debito}": {
+      "post": {
+        "summary": "Gerar GRU de alguns débitos. Ex.: codigoBarra, vencimentoGuia, valorGuia, guiaPDF.",
+        "description": "Retornar um objeto com um Array de ItensGuia, que contém informações como o número do código de barras    e o valor da guia, e o PDF da guia em base64, de um determinado tipo de débito. Usado quando pra quando se quer    pagar alguns débitos.",
         "parameters": [
           {
-            "name": "listaIDs",
+            "name": "ListaIDsDTO",
             "required": true,
-            "in": "path",
-            "description": "Lista de IDs de debitos, separados por virgula",
-            "type": ""
+            "in": "body",
+            "schema": { "$ref": "#/definitions/ListaIDsDTO" }
+          },
+          {
+            "name": "ListaIDs",
+            "required": true,
+            "in": "body",
+            "description": "Array de 'idDebito'.",
+            "isArray": false,
+            "schema": { "$ref": "#/definitions/ListaIDsDTO" }
           },
           {
             "name": "tipo_debito",
             "required": true,
             "in": "path",
-            "description": "tipo do debito",
+            "description": "tipo do débito.",
             "type": ""
           },
           {
             "name": "renavam",
             "required": true,
             "in": "path",
-            "description": "Renavam do veiculo",
+            "description": "Renavam do veículo.",
             "type": ""
           },
           {
             "name": "placa",
             "required": true,
             "in": "path",
-            "description": "Placa do veiculo",
+            "description": "Placa do veículo.",
             "type": ""
           }
         ],
         "responses": {
           "200": {
-            "description": "Veiculo encontrado, retorna o um array de itens e o pdf em base64 do boleto",
-            "schema": { "$ref": "#/definitions/DebitoRetorno" }
+            "description": "Veículo encontrado, retorna o um array de itens   e o pdf em base64 do boleto.",
+            "schema": { "$ref": "#/definitions/GerarGuiaRetornoDTO" }
           },
-          "403": { "description": "Retorna uma MensagemErro" }
+          "403": { "description": "Retorna uma MensagemErro." }
+        },
+        "tags": ["veiculos-debitos"],
+        "produces": ["application/json"],
+        "consumes": ["application/json"]
+      }
+    },
+    "/veiculos/debitos/get-guia/{codigoBarra}": {
+      "get": {
+        "summary": "Guia PDF.",
+        "description": "Retornar o pdf da guia para pagamento.",
+        "parameters": [
+          {
+            "name": "codigoBarra",
+            "required": true,
+            "in": "path",
+            "description": "Código de barras da guia gerada.",
+            "type": ""
+          }
+        ],
+        "responses": {
+          "200": { "description": "Guia encontrada, retorna uma guia em pdf." },
+          "403": { "description": "Retorna uma MensagemErro." }
         },
         "tags": ["veiculos-debitos"],
         "produces": ["application/json"],
@@ -224,41 +253,80 @@
     }
   },
   "definitions": {
-    "VeiculoRetorno": {
+    "VeiculoRetornoDTO": {
       "type": "object",
       "properties": {
-        "placa": { "type": "string" },
-        "modelo": { "type": "string" },
-        "renavam": { "type": "number" },
+        "placa": { "type": "string", "example": "ABC1234" },
+        "modelo": { "type": "string", "example": "Uno 1.0" },
+        "renavam": { "type": "number", "example": "12345679810" },
         "mensagemErro": { "type": "string" }
       },
       "required": ["placa", "modelo", "renavam", "mensagemErro"]
     },
-    "Debito": {
+    "TipoFlagDTO": {
       "type": "object",
       "properties": {
-        "classe": { "type": "string" },
-        "codigoServico": { "type": "number" },
-        "descricaoServico": { "type": "string" },
-        "dataVencimento": { "type": "string" },
-        "exercicio": { "type": "number" },
-        "idDebito": { "type": "number" },
-        "parcela": { "type": "number" },
-        "placa": { "type": "string" },
-        "valorAtualizadoFranquia": { "type": "number" },
-        "flagDpvatAnterior": { "type": "number" },
-        "dpvatCotas": { "type": "string" },
-        "flagDpvatExercicio": { "type": "number" },
-        "flagIpvaAnterior": { "type": "number" },
-        "flagIpvaExercicio": { "type": "number" },
-        "flagIpvaParcelamento": { "type": "number" },
-        "flagLicenciamentoAnterior": { "type": "number" },
-        "flagLicenciamentoExercicio": { "type": "number" },
-        "flagMultas": { "type": "number" },
-        "flagTaxaEspecial": { "type": "number" },
-        "flagTaxaPatio": { "type": "number" },
-        "flagTaxaServico": { "type": "number" },
-        "ipvaCotas": { "type": "string" }
+        "checked": {
+          "type": "boolean",
+          "description": "Esse atributo descreve se o debito deve estar marcado quando exibido ou não.",
+          "example": true
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Esse atributo descreve se o debito deve estar habilitado ou não para a seleção.",
+          "example": false
+        }
+      },
+      "required": ["checked", "disabled"]
+    },
+    "DebitoDTO": {
+      "type": "object",
+      "properties": {
+        "classe": {
+          "type": "string",
+          "enum": [
+            "Licenciamento",
+            "Registro Veículo",
+            "IPVA",
+            "Seguro DPVAT",
+            "Multas",
+            "Vistoria",
+            "Certidões",
+            "Apreensão",
+            "Credenciamento",
+            "Diversos Veículos",
+            "Parcelamento IPVA",
+            "Placas",
+            "Pátio",
+            "Registro de Contrato"
+          ],
+          "example": "Licenciamento"
+        },
+        "codigoServico": { "type": "number", "example": 27 },
+        "descricaoServico": {
+          "type": "string",
+          "example": "Postagem do CRLV 2019"
+        },
+        "dataVencimento": {
+          "type": "string",
+          "example": "2019-04-17T00:00:00.000Z"
+        },
+        "exercicio": { "type": "number", "example": 2019 },
+        "idDebito": { "type": "number", "example": 158009223 },
+        "parcela": { "type": "number", "example": 0 },
+        "placa": { "type": "string", "example": "ABC1234" },
+        "valorAtualizadoFranquia": { "type": "number", "example": 20.53 },
+        "dpvatCotas": { "type": "string", "example": "" },
+        "flag": {
+          "title": "TipoFlagDTO",
+          "allOf": [
+            { "$ref": "#/definitions/TipoFlagDTO" },
+            {
+              "description": "Atributo que determina se o objeto é obrigatório ou não na hora de gerar     a guia para o pagamento.     -Se retornar 'checked === false' e 'disabled === false' o débito é opcional, mas é exibido não selecionado;     -Se retornar 'checked === true' e 'disabled === true' o débito é obrigatório;     -Se retornar 'checked === true' e 'disabled === false' o débito é opcional, mas é exibido selecionado;     -Se retornar 'checked === false' e 'disabled === true' o débito está desabilitado;     Esse atributo só é exibido se for requisitado por tipo.     "
+            }
+          ]
+        },
+        "ipvaCotas": { "type": "string", "example": "" }
       },
       "required": [
         "classe",
@@ -270,32 +338,22 @@
         "parcela",
         "placa",
         "valorAtualizadoFranquia",
-        "flagDpvatAnterior",
         "dpvatCotas",
-        "flagDpvatExercicio",
-        "flagIpvaAnterior",
-        "flagIpvaExercicio",
-        "flagIpvaParcelamento",
-        "flagLicenciamentoAnterior",
-        "flagLicenciamentoExercicio",
-        "flagMultas",
-        "flagTaxaEspecial",
-        "flagTaxaPatio",
-        "flagTaxaServico",
+        "flag",
         "ipvaCotas"
       ]
     },
-    "TipoDebito": {
+    "TipoDebitoDTO": {
       "type": "object",
       "properties": {
-        "temLicenciamentoAtual": { "type": "string" },
-        "temLicenciamentoAnterior": { "type": "string" },
-        "temDPVAT": { "type": "string" },
-        "temIPVA": { "type": "string" },
-        "temMulta": { "type": "string" },
-        "temIPVAAnterior": { "type": "string" },
-        "temDPVATAnterior": { "type": "string" },
-        "mensagemErro": { "type": "string" }
+        "temLicenciamentoAtual": { "type": "boolean", "example": true },
+        "temLicenciamentoAnterior": { "type": "boolean", "example": true },
+        "temDPVAT": { "type": "boolean", "example": false },
+        "temIPVA": { "type": "boolean", "example": true },
+        "temMulta": { "type": "boolean", "example": false },
+        "temIPVAAnterior": { "type": "boolean", "example": true },
+        "temDPVATAnterior": { "type": "boolean", "example": false },
+        "mensagemErro": { "type": "string", "example": "" }
       },
       "required": [
         "temLicenciamentoAtual",
@@ -308,22 +366,115 @@
         "mensagemErro"
       ]
     },
-    "GerarGuiaRetorno": {
+    "ItemGuiaDTO": {
       "type": "object",
       "properties": {
-        "itensGuia": { "type": "array", "items": { "type": "string" } },
+        "linhaDigitavel": {
+          "type": "string",
+          "example": "85800000002-0  21510219201-5  90000000000-0  80000000000-0"
+        },
+        "codigoBarra": {
+          "type": "string",
+          "example": "85800000002215102192019000000000080000000000"
+        },
+        "valorGuia": { "type": "number", "example": "20.5300" },
+        "postagem": { "type": "boolean", "example": true },
+        "nome": { "type": "string", "example": "José Maria" },
+        "placa": { "type": "string", "example": "ABC1234" },
+        "renavam": { "type": "number", "example": "9876543210" },
+        "marca": { "type": "string", "example": "Uno 1.0" },
+        "nossoNumero": { "type": "string", "example": "12345678910987654" },
+        "vencimentoGuia": {
+          "type": "string",
+          "example": "2019-03-31T00:00:00.000Z"
+        },
+        "tipoRegistro": { "type": "number", "example": 1 },
+        "classe": {
+          "type": "string",
+          "enum": [
+            "Licenciamento",
+            "Registro Veículo",
+            "IPVA",
+            "Seguro DPVAT",
+            "Multas",
+            "Vistoria",
+            "Certidões",
+            "Apreensão",
+            "Credenciamento",
+            "Diversos Veículos",
+            "Parcelamento IPVA",
+            "Placas",
+            "Pátio",
+            "Registro de Contrato"
+          ],
+          "example": "Licenciamento"
+        },
+        "descricaoServico": {
+          "type": "string",
+          "example": "Postagem do CRLV 2018"
+        },
+        "dataVencimento": {
+          "type": "string",
+          "example": "2019-04-17T00:00:00.000Z"
+        },
+        "valorVencimento": { "type": "number", "example": "19.6400" },
+        "valorCorrigido": { "type": "number", "example": "20.5300" },
+        "valorDesconto": { "type": "number", "example": "0.0000" },
+        "valorJuros": { "type": "number", "example": "0.0000" },
+        "valorMulta": { "type": "number", "example": "0.0000" },
+        "valorAtualizadoFranquia": { "type": "number", "example": "20.5300" },
+        "dataAutuacao": { "type": "string", "example": "" },
+        "horaAutuacao": { "type": "string", "example": "00:00" },
+        "valorAuto": { "type": "number", "example": "0" }
+      },
+      "required": [
+        "linhaDigitavel",
+        "codigoBarra",
+        "valorGuia",
+        "postagem",
+        "nome",
+        "placa",
+        "renavam",
+        "marca",
+        "nossoNumero",
+        "vencimentoGuia",
+        "tipoRegistro",
+        "classe",
+        "descricaoServico",
+        "dataVencimento",
+        "valorVencimento",
+        "valorCorrigido",
+        "valorDesconto",
+        "valorJuros",
+        "valorMulta",
+        "valorAtualizadoFranquia",
+        "dataAutuacao",
+        "horaAutuacao",
+        "valorAuto"
+      ]
+    },
+    "GerarGuiaRetornoDTO": {
+      "type": "object",
+      "properties": {
+        "itensGuia": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ItemGuiaDTO" }
+        },
         "mensagemErro": { "type": "string" },
         "guiaPDF": { "type": "string" }
       },
       "required": ["itensGuia", "mensagemErro", "guiaPDF"]
     },
-    "DebitoRetorno": {
+    "ListaIDsDTO": {
       "type": "object",
       "properties": {
-        "debitos": { "type": "array", "items": { "type": "string" } },
-        "mensagemErro": { "type": "string" }
+        "lista": {
+          "type": "array",
+          "example": [12345678, 98765432],
+          "items": { "type": "string" }
+        }
       },
-      "required": ["debitos", "mensagemErro"]
+      "required": ["lista"]
     }
   }
 }

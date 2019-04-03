@@ -31,4 +31,4 @@ Dado o usuario informa a placa do veiculo
 E informa o renavam do veiculo
 Quando o usuario deseja pagar todos os debitos
 E  solicita a geração da GRU
-Então o sistema retorna uma mensagem informando que não é possivel escolher a cota única e as demais cotas de IPVA para o mesmo exercício
+Então o sistema retorna uma mensagem informando que não é possivel fazer essa operação
