@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0"></a>
+# [1.1.0](https://gitlab.es.gov.br/espm/detran-debito/api-detran/compare/v1.0.1...v1.1.0) (2019-04-03)
+
+
+### Bug Fixes
+
+* **sonar:** Acerto no endereço do sonar ([3352497](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/3352497))
+* **test:** Correçao do problema com redis nos testes ([a082c32](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/a082c32))
+* **testes:** Testes e2e parcialmente funcionando ([4e24abf](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/4e24abf))
+* **testes:** Testes UNI, COV e E2E funcionando ([ba5b587](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/ba5b587))
+
+
+### Features
+
+* **flags:** Tipo Flag ([0435638](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/0435638))
+* **flags:** TipoFlag finalizado ([e633fe5](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/e633fe5))
+* **guiapdf:** Retornando nome da guia no response.header ([cf22781](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/cf22781))
+* **mocks:** Mocks dos models do WSIB ([b653aec](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/b653aec))
+* **models:** Tipos refentes ao retorno do WSIB ([9fd7427](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/9fd7427))
+* **pdf:** application/pdf response ([b7823bc](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/b7823bc))
+* **swagger:** Atualizaçao do swagger ([a716f47](https://gitlab.es.gov.br/espm/detran-debito/api-detran/commit/a716f47))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://gitlab.es.gov.br/espm/detran-debito/api-detran/compare/v1.0.0...v1.0.1) (2019-03-13)
 
