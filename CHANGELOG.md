@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.2"></a>
+## [1.1.2](https://github.com/prodest/api-detran-debitos/compare/v1.1.1...v1.1.2) (2019-04-04)
+
+
+### Bug Fixes
+
+* readme adjustment ([6369348](https://github.com/prodest/api-detran-debitos/commit/6369348))
+* readme adjustment ([31e6f78](https://github.com/prodest/api-detran-debitos/commit/31e6f78))
+* readme adjustment ([7602ff8](https://github.com/prodest/api-detran-debitos/commit/7602ff8))
+* update readme ([f533696](https://github.com/prodest/api-detran-debitos/commit/f533696))
+
+
+
 <a name="1.1.1"></a>
 ## [1.1.1](https://gitlab.es.gov.br/espm/detran-debito/api-detran/compare/v1.1.0...v1.1.1) (2019-04-03)
 
