@@ -11,7 +11,7 @@ cache:
   - node_modules/
   
 test_job:
-  image: registry.es.gov.br/espm/infraestrutura/containers/node:10.15.3
+  image: registry.es.gov.br/espm/infraestrutura/containers/node:10-slim
   stage: test
   script:
      - npm install
@@ -46,7 +46,7 @@ build_job:
     
 deploy_job:
   stage: deploy
-  image: registry.es.gov.br/espm/infraestrutura/containers/node:10.15.3
+  image: registry.es.gov.br/espm/infraestrutura/containers/node:10-slim
   only:
     - tags
   script:

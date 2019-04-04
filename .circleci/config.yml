@@ -3,7 +3,7 @@ version: 2
 jobs:
   quality:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:10
     steps:
       - checkout
       - restore_cache:
@@ -25,7 +25,7 @@ jobs:
   
   build:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:10
     working_directory: $CIRCLE_WORKING_DIRECTORY
     steps:
       - checkout
