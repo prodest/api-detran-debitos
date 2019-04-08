@@ -61,7 +61,7 @@ export class ItemGuiaDTO extends DefineClasseDebitosDTO {
   descricaoServico: string;
 
   @ApiModelProperty({example: '2019-04-17T00:00:00.000Z'})
-  dataVencimento: string;
+  dataVencimento: Date;
 
   @ApiModelProperty({example: '19.6400'})
   valorVencimento: number;
@@ -105,7 +105,7 @@ export class ItemGuiaDTO extends DefineClasseDebitosDTO {
     this.tipoRegistro = i_guia.Tiporegistro;
     this.classe = super.defineClasse(i_guia.Classe) || i_guia.Classe;
     this.descricaoServico = i_guia.Descricaoservico;
-    this.dataVencimento = i_guia.Datavencimento;
+    this.dataVencimento = this.addHours(i_guia.Datavencimento, 3);  // ajusta timezone do valor retornado pelo webservice do Detran
     this.valorVencimento = i_guia.Valorvencimento;
     this.valorCorrigido = i_guia.Valorcorrigido;
     this.valorDesconto = i_guia.Valordesconto;
@@ -115,5 +115,9 @@ export class ItemGuiaDTO extends DefineClasseDebitosDTO {
     this.dataAutuacao = i_guia.Dataautuacao;
     this.horaAutuacao = i_guia.Horaautuacao;
     this.valorAuto = i_guia.Valorauto;
+  }
+
+  private addHours(date: Date, hours: number): Date {
+    return new Date(+date + hours * 1000 * 60 * 60);
   }
 }

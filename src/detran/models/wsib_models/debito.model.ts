@@ -1,7 +1,7 @@
 export class Debito {
     DescricaoServico: string;
     ValorAtualizadoFranquia: number;
-    DataVencimento: string;
+    DataVencimento: Date;
     DpvatCotas: string;
     IdDebito: number;
     Placa: string;

@@ -12,7 +12,7 @@ export class ItemGuia {
     Tiporegistro: number;
     Classe: number;
     Descricaoservico: string;
-    Datavencimento: string;
+    Datavencimento: Date;
     Valorvencimento: number;
     Valorcorrigido: number;
     Valordesconto: number;
