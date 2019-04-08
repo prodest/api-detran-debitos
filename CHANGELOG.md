@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.3"></a>
+## [1.1.3](https://github.com/prodest/api-detran-debitos/compare/v1.1.2...v1.1.3) (2019-04-08)
+
+
+### Bug Fixes
+
+* **debits:** data vencimentoGuia sem ser UTC ([5238063](https://github.com/prodest/api-detran-debitos/commit/5238063))
+
+
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/prodest/api-detran-debitos/compare/v1.1.1...v1.1.2) (2019-04-04)
 
